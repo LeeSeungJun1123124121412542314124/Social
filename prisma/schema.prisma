@@ -1,0 +1,205 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// SNS 계정
+model SocialAccount {
+  id                    String    @id @default(cuid())
+  platform              String    // instagram | tiktok | youtube | threads | x
+  encryptedAccessToken  String
+  encryptedRefreshToken String?
+  profileName           String
+  profileImage          String?
+  profileUrl            String?
+  followerCount         Int       @default(0)
+  tokenExpiresAt        DateTime?
+  isActive              Boolean   @default(true)
+  connectedAt           DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  postAccounts PostAccount[]
+  publishLogs  PublishLog[]
+
+  @@index([platform])
+  @@index([isActive])
+}
+
+// 게시물
+model Post {
+  id           String    @id @default(cuid())
+  type         String    // text | carousel | blog | short_form | thread
+  title        String?
+  contentText  String?
+  contentData  String?   // JSON - 카드뉴스 슬라이드 등 구조화 데이터
+  mediaUrls    String?   // JSON array
+  status       String    @default("draft") // draft | scheduled | publishing | published | failed | partial
+  scheduledAt  DateTime?
+  publishedAt  DateTime?
+  sourcePostId String?   // 리퍼포징 원본 포스트
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  sourcePost      Post?          @relation("Repurposed", fields: [sourcePostId], references: [id])
+  repurposedPosts Post[]         @relation("Repurposed")
+  postAccounts    PostAccount[]
+  publishLogs     PublishLog[]
+  analytics       PostAnalytics[]
+
+  @@index([status])
+  @@index([scheduledAt])
+  @@index([type])
+  @@index([createdAt])
+}
+
+// 게시물 ↔ 계정 중간 테이블
+model PostAccount {
+  id              String @id @default(cuid())
+  postId          String
+  accountId       String
+  platformContent String? // JSON - 플랫폼별 커스텀 텍스트/해시태그
+
+  post    Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  account SocialAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, accountId])
+}
+
+// 발행 이력
+model PublishLog {
+  id             String   @id @default(cuid())
+  postId         String
+  accountId      String
+  platform       String
+  success        Boolean
+  platformPostId String?  // 플랫폼에서 부여한 게시물 ID
+  platformUrl    String?  // 발행된 게시물 URL
+  error          String?
+  attemptedAt    DateTime @default(now())
+
+  post    Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  account SocialAccount @relation(fields: [accountId], references: [id])
+
+  @@index([postId])
+  @@index([accountId])
+  @@index([attemptedAt])
+}
+
+// 게시물 성과 분석 (플랫폼별)
+model PostAnalytics {
+  id          String   @id @default(cuid())
+  postId      String
+  platform    String
+  impressions Int      @default(0)
+  reach       Int      @default(0)
+  engagement  Int      @default(0)
+  clicks      Int      @default(0)
+  comments    Int      @default(0)
+  shares      Int      @default(0)
+  saves       Int      @default(0)
+  likes       Int      @default(0)
+  fetchedAt   DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@index([platform])
+  @@index([fetchedAt])
+}
+
+// 콘텐츠 템플릿
+model Template {
+  id         String   @id @default(cuid())
+  name       String
+  type       String   // carousel | text | blog | short_form
+  category   String?  // 의료 | 이벤트 | 정보 등
+  styleData  String?  // JSON
+  thumbnail  String?
+  isCustom   Boolean  @default(false)
+  usageCount Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([type])
+  @@index([category])
+}
+
+// 콘텐츠 아이디어
+model ContentIdea {
+  id          String   @id @default(cuid())
+  topic       String
+  description String?
+  platform    String?  // 타겟 플랫폼
+  contentType String?  // 추천 콘텐츠 유형
+  used        Boolean  @default(false)
+  generatedAt DateTime @default(now())
+
+  @@index([used])
+  @@index([generatedAt])
+}
+
+// 자동응답 규칙
+model AutoReplyRule {
+  id            String   @id @default(cuid())
+  platform      String
+  triggerType   String   // comment | dm
+  keywords      String?  // JSON array - 매칭 키워드
+  useAI         Boolean  @default(true)
+  templateReply String?  // AI 미사용 시 고정 응답
+  salesKeywords String?  // JSON array - 세일즈 감지 키워드
+  notifyOnSales Boolean  @default(true)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  logs AutoReplyLog[]
+}
+
+// 자동응답 이력
+model AutoReplyLog {
+  id             String   @id @default(cuid())
+  ruleId         String?
+  platform       String
+  triggerType    String   // comment | dm
+  originalText   String
+  replyText      String
+  flaggedSales   Boolean  @default(false)
+  platformUserId String?  // 댓글/DM 작성자
+  platformPostId String?  // 원본 게시물 ID (댓글인 경우)
+  createdAt      DateTime @default(now())
+
+  rule AutoReplyRule? @relation(fields: [ruleId], references: [id])
+
+  @@index([platform])
+  @@index([flaggedSales])
+  @@index([createdAt])
+}
+
+// 알림
+model Notification {
+  id        String   @id @default(cuid())
+  type      String   // publish_success | publish_fail | sales_lead | token_expiry
+  title     String
+  message   String
+  metadata  String?  // JSON - 관련 postId, 링크 등
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([read])
+  @@index([createdAt])
+}
+
+// 앱 전역 설정 (1인용 - 단일 레코드)
+model AppSetting {
+  id               String   @id @default("singleton")
+  llmProvider      String   @default("openai")      // openai | anthropic
+  imageProvider    String   @default("flux")         // flux | dalle
+  defaultTone      String   @default("professional_friendly")
+  timezone         String   @default("Asia/Seoul")
+  autoReplyEnabled Boolean  @default(true)
+  updatedAt        DateTime @updatedAt
+}
