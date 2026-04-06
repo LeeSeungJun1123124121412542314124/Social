@@ -70,6 +70,8 @@ export default function EngagePage() {
       const res = await window.fetch(`/api/engage?${params}`);
       const data = await res.json() as { success: boolean; data: { items: EngageItem[]; total: number } };
       if (data.success) { setItems(data.data.items); setTotal(data.data.total); }
+    } catch (e) {
+      toast.error("목록을 불러오지 못했습니다.");
     } finally {
       setLoading(false);
     }
@@ -112,11 +114,12 @@ export default function EngagePage() {
 
   const handleIgnore = async () => {
     if (!selectedId) return;
-    await window.fetch(`/api/engage/${selectedId}`, {
+    const res = await window.fetch(`/api/engage/${selectedId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: "ignored" }),
     });
+    if (!res.ok) { toast.error("상태 변경에 실패했습니다."); return; }
     setSelectedId(null);
     void fetchItems();
   };
@@ -124,13 +127,17 @@ export default function EngagePage() {
   const handlePollX = async () => {
     setPollingX(true);
     try {
-      await window.fetch("/api/engage/poll", {
+      const res = await window.fetch("/api/engage/poll", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ platform: "x" }),
       });
-      toast.success("X 갱신 완료");
-      void fetchItems();
+      if (res.ok) {
+        toast.success("X 갱신 완료");
+        void fetchItems();
+      } else {
+        toast.error("X 갱신 실패");
+      }
     } finally {
       setPollingX(false);
     }
