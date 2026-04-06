@@ -1,7 +1,7 @@
 // src/app/content/carousel/page.tsx
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Wand2, Save, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -30,7 +30,7 @@ const STYLES = [
   { value: "warm", label: "따뜻한" },
 ];
 
-export default function CarouselPage() {
+function CarouselContent() {
   const searchParams = useSearchParams();
   const [topic, setTopic] = useState(searchParams.get("topic") ?? "");
   const [slideCount, setSlideCount] = useState("5");
@@ -219,5 +219,13 @@ export default function CarouselPage() {
         </TabsContent>
       </Tabs>
     </div>
+  );
+}
+
+export default function CarouselPage() {
+  return (
+    <Suspense>
+      <CarouselContent />
+    </Suspense>
   );
 }

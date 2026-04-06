@@ -1,7 +1,7 @@
 // src/app/content/blog/page.tsx
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Wand2, Copy, Save } from "lucide-react";
 import { toast } from "sonner";
@@ -15,7 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useBlogGenerator } from "@/hooks/useContent";
 import type { GeneratedBlog } from "@/types/content.types";
 
-export default function BlogPage() {
+function BlogContent() {
   const searchParams = useSearchParams();
   const [topic, setTopic] = useState(searchParams.get("topic") ?? "");
   const [keywords, setKeywords] = useState("");
@@ -146,5 +146,13 @@ export default function BlogPage() {
         </Card>
       )}
     </div>
+  );
+}
+
+export default function BlogPage() {
+  return (
+    <Suspense>
+      <BlogContent />
+    </Suspense>
   );
 }
