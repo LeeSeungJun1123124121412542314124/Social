@@ -3,7 +3,8 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
-import { RefreshCw, Send, X, AlertTriangle } from "lucide-react";
+import { RefreshCw, Send, X, AlertTriangle, MessageSquare } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,6 +39,14 @@ const PLATFORM_COLORS: Record<string, string> = {
   tiktok: "bg-blue-100 text-blue-700",
   youtube: "bg-red-100 text-red-700",
   x: "bg-sky-100 text-sky-700",
+};
+
+const PLATFORM_HEX: Record<string, string> = {
+  instagram: "#e879f9",
+  threads: "#374151",
+  tiktok: "#3b82f6",
+  youtube: "#ef4444",
+  x: "#0ea5e9",
 };
 
 const FILTER_TABS = [
@@ -201,17 +210,22 @@ export default function EngagePage() {
               </div>
             ))
           ) : items.length === 0 ? (
-            <div className="p-6 text-center text-muted-foreground text-sm">
-              수신된 항목이 없습니다.
-            </div>
+            <EmptyState
+              icon={MessageSquare}
+              title="수신된 항목이 없습니다"
+              description="댓글이나 DM이 수신되면 여기에 표시됩니다."
+            />
           ) : (
             items.map(item => (
               <button
                 key={item.id}
                 onClick={() => setSelectedId(item.id)}
+                style={{ borderLeftWidth: "3px", borderLeftStyle: "solid", borderLeftColor: PLATFORM_HEX[item.platform] ?? "#6b7280" }}
                 className={`w-full text-left p-3 border-b hover:bg-muted/50 transition-colors ${
                   selectedId === item.id ? "bg-muted" : ""
-                } ${item.status !== "pending" ? "opacity-50" : ""}`}
+                } ${item.status !== "pending" ? "opacity-50" : ""} ${
+                  item.flaggedSales ? "bg-amber-50/50 dark:bg-amber-900/10" : ""
+                }`}
               >
                 <div className="flex items-center gap-1.5 mb-1">
                   {item.flaggedSales && <span className="text-orange-500">●</span>}

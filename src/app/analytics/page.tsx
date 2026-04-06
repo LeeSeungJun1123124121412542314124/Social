@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { toast } from "sonner";
-import { RefreshCw, Wand2 } from "lucide-react";
+import { RefreshCw, Wand2, Eye, TrendingUp, Users2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -180,7 +180,7 @@ export default function AnalyticsPage() {
               onClick={() => setSelectedPlatform(p.key)}
               className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors flex flex-col ${
                 selectedPlatform === p.key
-                  ? "bg-primary text-primary-foreground font-medium"
+                  ? "bg-primary/10 text-primary font-medium"
                   : "hover:bg-muted"
               }`}
             >
@@ -229,29 +229,44 @@ export default function AnalyticsPage() {
             ) : (
               <>
                 <Card>
-                  <CardHeader className="pb-1 pt-3 px-4">
-                    <CardTitle className="text-xs text-muted-foreground">총 노출</CardTitle>
-                  </CardHeader>
-                  <CardContent className="px-4 pb-3">
-                    <p className="text-2xl font-bold">{(data?.summary.totalImpressions ?? 0).toLocaleString()}</p>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-lg bg-blue-50 p-2 dark:bg-blue-900/20">
+                        <Eye className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">총 노출</p>
+                        <p className="text-xl font-bold">{(data?.summary.totalImpressions ?? 0).toLocaleString()}</p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
                 <Card>
-                  <CardHeader className="pb-1 pt-3 px-4">
-                    <CardTitle className="text-xs text-muted-foreground">총 도달</CardTitle>
-                  </CardHeader>
-                  <CardContent className="px-4 pb-3">
-                    <p className="text-2xl font-bold">{(data?.summary.totalReach ?? 0).toLocaleString()}</p>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-lg bg-emerald-50 p-2 dark:bg-emerald-900/20">
+                        <Users2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">총 도달</p>
+                        <p className="text-xl font-bold">{(data?.summary.totalReach ?? 0).toLocaleString()}</p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
                 <Card>
-                  <CardHeader className="pb-1 pt-3 px-4">
-                    <CardTitle className="text-xs text-muted-foreground">팔로워 증감</CardTitle>
-                  </CardHeader>
-                  <CardContent className="px-4 pb-3">
-                    <p className={`text-2xl font-bold ${(data?.summary.followerGrowth ?? 0) >= 0 ? "text-green-600" : "text-red-500"}`}>
-                      {(data?.summary.followerGrowth ?? 0) >= 0 ? "+" : ""}{(data?.summary.followerGrowth ?? 0).toLocaleString()}
-                    </p>
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-lg bg-amber-50 p-2 dark:bg-amber-900/20">
+                        <TrendingUp className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">팔로워 증감</p>
+                        <p className={`text-xl font-bold ${(data?.summary.followerGrowth ?? 0) >= 0 ? "text-green-600" : "text-red-500"}`}>
+                          {(data?.summary.followerGrowth ?? 0) >= 0 ? "+" : ""}{(data?.summary.followerGrowth ?? 0).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </>
