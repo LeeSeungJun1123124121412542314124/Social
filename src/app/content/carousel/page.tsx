@@ -21,6 +21,14 @@ import { CarouselPreview } from "@/components/content/CarouselPreview";
 import { useCarouselGenerator } from "@/hooks/useContent";
 import type { CarouselSlide, GeneratedCarousel } from "@/types/content.types";
 
+// 스타일 옵션 — 렌더링마다 재생성 방지를 위해 컴포넌트 외부에 정의
+const STYLES = [
+  { value: "minimal", label: "미니멀" },
+  { value: "vivid", label: "생동감있는" },
+  { value: "professional", label: "전문적인" },
+  { value: "warm", label: "따뜻한" },
+];
+
 export default function CarouselPage() {
   const [topic, setTopic] = useState("");
   const [slideCount, setSlideCount] = useState("5");
@@ -61,7 +69,7 @@ export default function CarouselPage() {
   const handleSave = async () => {
     if (!result) return;
     try {
-      const res = await fetch("/api/content", {
+      const res = await window.fetch("/api/content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -74,19 +82,17 @@ export default function CarouselPage() {
             .map((s) => s.imageUrl as string),
         }),
       });
-      const data = await res.json() as { success: boolean };
-      if (data.success) toast.success("카드뉴스가 저장되었습니다.");
+      if (!res.ok) throw new Error(`저장 요청 실패: ${res.status}`);
+      const data = await res.json() as { success: boolean; error?: { message: string } };
+      if (data.success) {
+        toast.success("카드뉴스가 저장되었습니다.");
+      } else {
+        toast.error(data.error?.message ?? "저장에 실패했습니다.");
+      }
     } catch {
       toast.error("저장에 실패했습니다.");
     }
   };
-
-  const STYLES = [
-    { value: "minimal", label: "미니멀" },
-    { value: "vivid", label: "생동감있는" },
-    { value: "professional", label: "전문적인" },
-    { value: "warm", label: "따뜻한" },
-  ];
 
   return (
     <div className="space-y-6">
@@ -178,7 +184,7 @@ export default function CarouselPage() {
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {result.slides.map((slide, i) => (
                   <CarouselSlideCard
-                    key={i}
+                    key={slide.order}
                     slide={slide}
                     index={i}
                     onChange={(updated) => handleSlideChange(i, updated)}
