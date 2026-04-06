@@ -5,10 +5,9 @@ import { aiConfig } from "@/config/ai.config";
 import { AppError, ErrorCode } from "@/lib/error";
 import { TextGenerator } from "./generators/text.generator";
 import { CarouselGenerator } from "./generators/carousel.generator";
-// Blog/Bulk/Repurpose Generator는 Group 4에서 구현 예정 - 아래 주석은 그때 해제
-// import { BlogGenerator } from "./generators/blog.generator";
-// import { BulkGenerator } from "./generators/bulk.generator";
-// import { RepurposeGenerator } from "./generators/repurpose.generator";
+import { BlogGenerator } from "./generators/blog.generator";
+import { BulkGenerator } from "./generators/bulk.generator";
+import { RepurposeGenerator } from "./generators/repurpose.generator";
 
 // LLM provider 팩토리
 export function getLLMProvider(): LLMProvider {
@@ -57,13 +56,12 @@ export function getCarouselGenerator(): CarouselGenerator {
   return new CarouselGenerator(getLLMProvider(), getImageProvider());
 }
 
-// 아래 factory 함수들은 Group 4에서 generator 파일 생성 후 주석 해제 예정
-// export function getBlogGenerator(): BlogGenerator {
-//   return new BlogGenerator(getLLMProvider());
-// }
-// export function getBulkGenerator(): BulkGenerator {
-//   return new BulkGenerator(getLLMProvider());
-// }
-// export function getRepurposeGenerator(): RepurposeGenerator {
-//   return new RepurposeGenerator(getLLMProvider());
-// }
+export function getBlogGenerator(): BlogGenerator {
+  return new BlogGenerator(getLLMProvider());
+}
+export function getBulkGenerator(): BulkGenerator {
+  return new BulkGenerator(getLLMProvider());
+}
+export function getRepurposeGenerator(): RepurposeGenerator {
+  return new RepurposeGenerator(getLLMProvider());
+}

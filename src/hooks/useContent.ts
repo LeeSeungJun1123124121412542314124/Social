@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import type { GenerateTextInput, GeneratedText, GenerateCarouselInput, GeneratedCarousel } from "@/types/content.types";
+import type { GenerateTextInput, GeneratedText, GenerateCarouselInput, GeneratedCarousel, GenerateBlogInput, GeneratedBlog, BulkPlan, RepurposeInput, RepurposeResult } from "@/types/content.types";
+import type { PlatformType } from "@/types/platform.types";
 
 export interface ContentPost {
   id: string;
@@ -106,4 +107,113 @@ export function useCarouselGenerator() {
   );
 
   return { generate, loading, error };
+}
+
+export function useBlogGenerator() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const generate = useCallback(
+    async (input: GenerateBlogInput): Promise<GeneratedBlog | null> => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await window.fetch("/api/content/generate/blog", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        });
+        const data = await res.json() as {
+          success: boolean;
+          data: GeneratedBlog;
+          error?: { message: string };
+        };
+        if (!data.success) throw new Error(data.error?.message ?? "생성 실패");
+        return data.data;
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "알 수 없는 오류");
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+  return { generate, loading, error };
+}
+
+interface BulkInput {
+  theme: string;
+  count: number;
+  platforms: PlatformType[];
+  period?: string;
+}
+
+export function useBulkGenerator() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const generate = useCallback(
+    async (input: BulkInput): Promise<BulkPlan | null> => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await window.fetch("/api/content/generate/bulk", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        });
+        const data = await res.json() as {
+          success: boolean;
+          data: BulkPlan;
+          error?: { message: string };
+        };
+        if (!data.success) throw new Error(data.error?.message ?? "생성 실패");
+        return data.data;
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "알 수 없는 오류");
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+  return { generate, loading, error };
+}
+
+export function useRepurposeGenerator() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const repurpose = useCallback(
+    async (input: RepurposeInput): Promise<RepurposeResult[] | null> => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await window.fetch("/api/content/generate/repurpose", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        });
+        const data = await res.json() as {
+          success: boolean;
+          data: RepurposeResult[];
+          error?: { message: string };
+        };
+        if (!data.success) throw new Error(data.error?.message ?? "변환 실패");
+        return data.data;
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "알 수 없는 오류");
+        return null;
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
+
+  return { repurpose, loading, error };
 }
