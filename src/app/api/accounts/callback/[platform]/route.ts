@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { accountService } from "@/services/account.service";
+import { PKCE_PLATFORMS } from "@/lib/pkce";
 import { logger } from "@/lib/logger";
 import type { PlatformType } from "@/types/platform.types";
-
-// PKCE가 필요한 플랫폼 목록
-const PKCE_PLATFORMS: PlatformType[] = ["x", "tiktok"];
 
 export async function GET(
   req: NextRequest,

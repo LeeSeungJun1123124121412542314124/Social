@@ -174,6 +174,7 @@ export class TikTokAdapter implements PlatformAdapter {
     const fs = await import("fs/promises");
     const path = await import("path");
     const videoPath = path.join(process.cwd(), "public", content.videoUrl);
+    // TODO(Phase 4): 대용량 영상 지원 시 스트리밍 업로드로 교체 필요
     const videoBuffer = await fs.readFile(videoPath);
 
     const uploadRes = await fetch(initData.data.upload_url, {
@@ -232,8 +233,9 @@ export class TikTokAdapter implements PlatformAdapter {
 
   async getPostAnalytics(account: SocialAccount, postId: string): Promise<AnalyticsData> {
     const token = decrypt(account.encryptedAccessToken);
+    const filters = encodeURIComponent(JSON.stringify({ video_ids: [postId] }));
     const res = await fetch(
-      `${this.baseUrl}/video/query/?fields=id,statistics&filters={"video_ids":["${postId}"]}`,
+      `${this.baseUrl}/video/query/?fields=id,statistics&filters=${filters}`,
       { headers: { Authorization: `Bearer ${token}` } }
     );
     if (!res.ok) {

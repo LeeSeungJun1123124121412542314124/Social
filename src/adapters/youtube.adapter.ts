@@ -180,6 +180,7 @@ export class YouTubeAdapter implements PlatformAdapter {
     const fs = await import("fs/promises");
     const path = await import("path");
     const videoPath = path.join(process.cwd(), "public", content.videoUrl);
+    // TODO(Phase 4): 대용량 영상 지원 시 스트리밍 업로드로 교체 필요
     const videoBuffer = await fs.readFile(videoPath);
 
     const uploadRes = await fetch(uploadUrl, {
