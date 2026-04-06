@@ -115,12 +115,22 @@ export const analyticsService = {
       include: { post: { select: { title: true } } },
     });
 
-    const latestSnapshots = snapshots.slice(-1);
-    const earliestSnapshots = snapshots.slice(0, 1);
     const totalImpressions = snapshots.reduce((s, v) => s + v.impressions, 0);
     const totalReach = snapshots.reduce((s, v) => s + v.reach, 0);
-    const followerGrowth =
-      (latestSnapshots[0]?.followers ?? 0) - (earliestSnapshots[0]?.followers ?? 0);
+    // platform별 첫 스냅샷과 마지막 스냅샷의 followers 차이를 합산
+    const followerGrowth = platform === "all"
+      ? (() => {
+          const byPlatform: Record<string, number[]> = {};
+          for (const s of snapshots) {
+            if (!byPlatform[s.platform]) byPlatform[s.platform] = [];
+            byPlatform[s.platform].push(s.followers);
+          }
+          return Object.values(byPlatform).reduce((total, followers) => {
+            if (followers.length < 2) return total;
+            return total + (followers[followers.length - 1] - followers[0]);
+          }, 0);
+        })()
+      : (snapshots.slice(-1)[0]?.followers ?? 0) - (snapshots[0]?.followers ?? 0);
 
     return {
       snapshots,

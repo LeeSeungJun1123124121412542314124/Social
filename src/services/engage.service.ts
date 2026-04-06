@@ -237,6 +237,10 @@ export const engageService = {
   },
 
   async updateItem(id: string, patch: { aiDraft?: string; status?: string }): Promise<EngageItem> {
+    const VALID_STATUSES = ["pending", "replied", "ignored"];
+    if (patch.status !== undefined && !VALID_STATUSES.includes(patch.status)) {
+      throw new AppError("유효하지 않은 상태값입니다.", ErrorCode.VALIDATION_ERROR, 400);
+    }
     return prisma.engageItem.update({ where: { id }, data: patch });
   },
 
