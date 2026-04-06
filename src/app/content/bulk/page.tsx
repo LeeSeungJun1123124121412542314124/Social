@@ -17,7 +17,11 @@ import type { PlatformType } from "@/types/platform.types";
 import { useRouter } from "next/navigation";
 
 const TYPE_LABELS: Record<string, string> = {
-  text: "텍스트", carousel: "카드뉴스", blog: "블로그",
+  text: "텍스트",
+  carousel: "카드뉴스",
+  blog: "블로그",
+  short_form: "숏폼",
+  thread: "쓰레드",
 };
 
 export default function BulkPage() {

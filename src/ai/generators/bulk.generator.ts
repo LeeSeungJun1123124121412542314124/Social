@@ -1,14 +1,6 @@
 // src/ai/generators/bulk.generator.ts
 import type { LLMProvider } from "../ai.provider";
-import type { BulkPlan } from "@/types/content.types";
-import type { PlatformType } from "@/types/platform.types";
-
-interface BulkInput {
-  theme: string;
-  count: number;
-  platforms: PlatformType[];
-  period?: string;
-}
+import type { BulkPlan, BulkInput } from "@/types/content.types";
 
 export class BulkGenerator {
   constructor(private llm: LLMProvider) {}

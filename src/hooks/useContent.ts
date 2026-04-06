@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import type { GenerateTextInput, GeneratedText, GenerateCarouselInput, GeneratedCarousel, GenerateBlogInput, GeneratedBlog, BulkPlan, RepurposeInput, RepurposeResult } from "@/types/content.types";
-import type { PlatformType } from "@/types/platform.types";
+import type { GenerateTextInput, GeneratedText, GenerateCarouselInput, GeneratedCarousel, GenerateBlogInput, GeneratedBlog, BulkPlan, BulkInput, RepurposeInput, RepurposeResult } from "@/types/content.types";
 
 export interface ContentPost {
   id: string;
@@ -141,13 +140,6 @@ export function useBlogGenerator() {
   );
 
   return { generate, loading, error };
-}
-
-interface BulkInput {
-  theme: string;
-  count: number;
-  platforms: PlatformType[];
-  period?: string;
 }
 
 export function useBulkGenerator() {

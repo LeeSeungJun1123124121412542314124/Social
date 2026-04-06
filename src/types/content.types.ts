@@ -114,6 +114,13 @@ export interface BulkPlan {
   ideas: BulkIdeaItem[];
 }
 
+export interface BulkInput {
+  theme: string;
+  count: number;
+  platforms: PlatformType[];
+  period?: string;
+}
+
 // RepurposeResult 타입 (Task B3에서 사용)
 export interface RepurposeResult {
   format: ContentType;

@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Wand2, Copy, Save } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,8 @@ import { useBlogGenerator } from "@/hooks/useContent";
 import type { GeneratedBlog } from "@/types/content.types";
 
 export default function BlogPage() {
-  const [topic, setTopic] = useState("");
+  const searchParams = useSearchParams();
+  const [topic, setTopic] = useState(searchParams.get("topic") ?? "");
   const [keywords, setKeywords] = useState("");
   const [targetLength, setTargetLength] = useState("800");
   const [result, setResult] = useState<GeneratedBlog | null>(null);

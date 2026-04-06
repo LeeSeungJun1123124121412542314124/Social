@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Wand2, Save, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -30,7 +31,8 @@ const STYLES = [
 ];
 
 export default function CarouselPage() {
-  const [topic, setTopic] = useState("");
+  const searchParams = useSearchParams();
+  const [topic, setTopic] = useState(searchParams.get("topic") ?? "");
   const [slideCount, setSlideCount] = useState("5");
   const [style, setStyle] = useState("minimal");
   const [generateImages, setGenerateImages] = useState(false);
