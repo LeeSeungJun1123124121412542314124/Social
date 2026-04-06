@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { toast } from "sonner";
 import { RefreshCw, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import ReactMarkdown from "react-markdown";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend,
 } from "recharts";
@@ -34,13 +35,18 @@ interface DashboardData {
 }
 
 const PLATFORMS = [
-  { key: "all", label: "🌐 전체" },
-  { key: "instagram", label: "📸 Instagram" },
-  { key: "threads", label: "🧵 Threads" },
-  { key: "tiktok", label: "🎵 TikTok" },
-  { key: "youtube", label: "📺 YouTube" },
-  { key: "x", label: "🐦 X" },
+  { key: "all", emoji: "🌐", label: "전체" },
+  { key: "instagram", emoji: "📸", label: "Instagram" },
+  { key: "threads", emoji: "🧵", label: "Threads" },
+  { key: "tiktok", emoji: "🎵", label: "TikTok" },
+  { key: "youtube", emoji: "📺", label: "YouTube" },
+  { key: "x", emoji: "🐦", label: "X" },
 ];
+
+function formatNumber(n: number): string {
+  if (n >= 1000) return `${(n / 1000).toFixed(1)}K`;
+  return String(n);
+}
 
 const PERIOD_OPTIONS = [
   { value: "7", label: "7일" },
@@ -70,6 +76,7 @@ export default function AnalyticsPage() {
     setLoading(true);
     try {
       const res = await window.fetch(`/api/analytics?platform=${selectedPlatform}&days=${days}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json() as { success: boolean; data: DashboardData };
       if (json.success) setData(json.data);
     } catch {
@@ -85,9 +92,11 @@ export default function AnalyticsPage() {
     setSyncing(true);
     try {
       const res = await window.fetch("/api/analytics/sync", { method: "POST" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json() as { success: boolean; data: { synced: number; failed: number } };
       if (json.success) {
         toast.success(`${json.data.synced}개 계정 동기화 완료${json.data.failed > 0 ? ` (${json.data.failed}건 실패)` : ""}`);
+        // fetchDashboard는 내부에서 자체 에러 처리
         void fetchDashboard();
       }
     } catch {
@@ -102,6 +111,7 @@ export default function AnalyticsPage() {
     setReport(null);
     try {
       const res = await window.fetch("/api/analytics/report", { method: "POST" });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json() as { success: boolean; data: { report: string } };
       if (json.success) setReport(json.data.report);
       else toast.error("리포트 생성 실패");
@@ -113,7 +123,7 @@ export default function AnalyticsPage() {
   };
 
   // 스냅샷을 날짜별로 집계 (차트용)
-  const chartData = (() => {
+  const chartData = useMemo(() => {
     if (!data) return [];
     const byDate: Record<string, { date: string; impressions: number; reach: number }> = {};
     for (const s of data.snapshots) {
@@ -122,18 +132,27 @@ export default function AnalyticsPage() {
       byDate[date].impressions += s.impressions;
       byDate[date].reach += s.reach;
     }
-    return Object.values(byDate);
-  })();
+    return Object.values(byDate).sort((a, b) => a.date.localeCompare(b.date));
+  }, [data]);
+
+  // 사이드바용 플랫폼별 노출 합계
+  const platformImpressions = useMemo(() => {
+    if (!data) return {} as Record<string, number>;
+    return data.snapshots.reduce<Record<string, number>>((acc, s) => {
+      acc[s.platform] = (acc[s.platform] ?? 0) + s.impressions;
+      return acc;
+    }, {});
+  }, [data]);
 
   // 전체 선택 시 플랫폼별 비교 데이터
-  const platformBarData = (() => {
+  const platformBarData = useMemo(() => {
     if (!data || selectedPlatform !== "all") return [];
     const byPlatform: Record<string, number> = {};
     for (const s of data.snapshots) {
       byPlatform[s.platform] = (byPlatform[s.platform] ?? 0) + s.impressions;
     }
     return Object.entries(byPlatform).map(([platform, impressions]) => ({ platform, impressions }));
-  })();
+  }, [data, selectedPlatform]);
 
   return (
     <div className="space-y-6">
@@ -149,10 +168,6 @@ export default function AnalyticsPage() {
               <option key={o.value} value={o.value}>{o.label}</option>
             ))}
           </select>
-          <Button variant="outline" size="sm" onClick={() => void handleSync()} disabled={syncing}>
-            <RefreshCw className={`h-4 w-4 mr-1.5 ${syncing ? "animate-spin" : ""}`} />
-            동기화
-          </Button>
         </div>
       </div>
 
@@ -163,15 +178,30 @@ export default function AnalyticsPage() {
             <button
               key={p.key}
               onClick={() => setSelectedPlatform(p.key)}
-              className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors ${
+              className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors flex flex-col ${
                 selectedPlatform === p.key
                   ? "bg-primary text-primary-foreground font-medium"
                   : "hover:bg-muted"
               }`}
             >
-              {p.label}
-              {p.key === "x" && (
-                <span className="text-xs text-muted-foreground ml-1">(수동)</span>
+              <span>
+                {p.emoji} {p.label}
+                {p.key === "x" && (
+                  <span className="text-xs text-muted-foreground ml-1">(수동)</span>
+                )}
+              </span>
+              {p.key === "all" ? (
+                data && (
+                  <span className="text-xs text-muted-foreground">
+                    {formatNumber(Object.values(platformImpressions).reduce((a, b) => a + b, 0))} 노출
+                  </span>
+                )
+              ) : (
+                platformImpressions[p.key] !== undefined && (
+                  <span className="text-xs text-muted-foreground">
+                    {formatNumber(platformImpressions[p.key])} 노출
+                  </span>
+                )
               )}
             </button>
           ))}
@@ -179,6 +209,17 @@ export default function AnalyticsPage() {
 
         {/* 우측: 대시보드 */}
         <div className="flex-1 space-y-4">
+          {/* 우측 패널 헤더: 플랫폼명 + 동기화 버튼 */}
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold">
+              {PLATFORMS.find(p => p.key === selectedPlatform)?.label ?? "전체"}
+            </h2>
+            <Button variant="outline" size="sm" onClick={() => void handleSync()} disabled={syncing}>
+              <RefreshCw className={`h-4 w-4 mr-1.5 ${syncing ? "animate-spin" : ""}`} />
+              동기화
+            </Button>
+          </div>
+
           {/* 요약 카드 */}
           <div className="grid grid-cols-3 gap-3">
             {loading ? (
@@ -313,8 +354,20 @@ export default function AnalyticsPage() {
                 {reportLoading ? "생성 중..." : "주간 리포트 생성"}
               </Button>
               {report && (
-                <div className="bg-muted rounded-md p-4 text-sm whitespace-pre-wrap leading-relaxed">
-                  {report}
+                <div className="bg-muted rounded-md p-4 text-sm">
+                  <div className="whitespace-pre-wrap [&_h1]:text-lg [&_h1]:font-bold [&_h2]:font-semibold [&_h3]:font-medium [&_strong]:font-semibold [&_ul]:list-disc [&_ul]:pl-4 [&_li]:my-0.5">
+                    <ReactMarkdown
+                      components={{
+                        a: ({ href, children }) => (
+                          <a href={href} target="_blank" rel="noopener noreferrer">
+                            {children}
+                          </a>
+                        ),
+                      }}
+                    >
+                      {report}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               )}
             </CardContent>
