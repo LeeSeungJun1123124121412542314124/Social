@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { TopBar } from "@/components/layout/TopBar";
+import { AppShell } from "@/components/layout/AppShell";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 
@@ -31,16 +30,7 @@ export default function RootLayout({
     <html lang="ko" className={`${geistSans.variable} ${jakartaSans.variable} h-full antialiased`}>
       <body className="h-full bg-background text-foreground">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <div className="flex h-full">
-            {/* 사이드바 */}
-            <Sidebar />
-
-            {/* 메인 영역 */}
-            <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
-              <TopBar />
-              <main className="flex-1 overflow-y-auto p-6">{children}</main>
-            </div>
-          </div>
+          <AppShell>{children}</AppShell>
           <Toaster />
         </ThemeProvider>
       </body>
