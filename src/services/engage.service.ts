@@ -3,7 +3,6 @@ import { prisma } from "@/lib/prisma";
 import { getPlatformAdapter } from "@/adapters";
 import { getLLMProvider } from "@/ai";
 import { logger } from "@/lib/logger";
-import { decrypt } from "@/lib/encryption";
 import { AppError, ErrorCode } from "@/lib/error";
 import type { SocialAccount, AutoReplyRule, EngageItem } from "@/generated/prisma/client";
 
@@ -23,7 +22,6 @@ export const engageService = {
 
     try {
       const adapter = getPlatformAdapter(account.platform);
-      const accessToken = decrypt(account.encryptedAccessToken);
 
       // 최근 7일 게시물의 댓글 수집
       const recentLogs = await prisma.publishLog.findMany({
@@ -94,7 +92,7 @@ export const engageService = {
       // 신규 항목만 처리 (@@unique로 upsert 시 기존은 스킵)
       for (const item of newItems) {
         try {
-          await this._processItem(item, rules, account, accessToken);
+          await this._processItem(item, rules, account);
         } catch (e) {
           logger.warn(`항목 처리 실패 (${item.platformItemId}):`, e);
         }
@@ -111,7 +109,6 @@ export const engageService = {
     },
     rules: AutoReplyRule[],
     account: SocialAccount,
-    _accessToken: string,
   ): Promise<void> {
     // 이미 존재하면 스킵
     const exists = await prisma.engageItem.findUnique({
@@ -119,10 +116,12 @@ export const engageService = {
     });
     if (exists) return;
 
-    // 세일즈 키워드 감지
-    const allSalesKw = rules.flatMap(r =>
-      r.salesKeywords ? (JSON.parse(r.salesKeywords) as string[]) : DEFAULT_SALES_KEYWORDS
-    );
+    // 세일즈 키워드 감지 (rules가 빈 배열이면 기본값 사용)
+    const allSalesKw = rules.length > 0
+      ? rules.flatMap(r =>
+          r.salesKeywords ? (JSON.parse(r.salesKeywords) as string[]) : DEFAULT_SALES_KEYWORDS
+        )
+      : DEFAULT_SALES_KEYWORDS;
     const flaggedSales = allSalesKw.some(kw => raw.text.includes(kw));
 
     // AI 초안 생성
@@ -241,6 +240,8 @@ export const engageService = {
     return prisma.engageItem.update({ where: { id }, data: patch });
   },
 
+  // X 플랫폼: pollAndProcess 내에서 POLL_EXCLUDED_PLATFORMS 체크로 스킵됨
+  // TODO(Phase 4): X API 직접 수집 로직 추가 필요
   async pollManual(platform: string): Promise<void> {
     const accounts = await prisma.socialAccount.findMany({
       where: { platform, isActive: true },
