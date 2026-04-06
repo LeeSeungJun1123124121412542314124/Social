@@ -24,5 +24,9 @@ export async function analyticsSyncJob(): Promise<void> {
     }
   }
 
-  logger.info(`[analytics-sync] 완료 — 처리: ${processed}, 실패: ${failed}`);
+  if (failed > 0) {
+    logger.warn(`[analytics-sync] 완료 — 처리: ${processed}, 실패: ${failed}`);
+  } else {
+    logger.info(`[analytics-sync] 완료 — 처리: ${processed}, 실패: ${failed}`);
+  }
 }

@@ -16,8 +16,14 @@ export const analyticsService = {
   async syncPostAnalytics(account: SocialAccount): Promise<void> {
     try {
       const adapter = getPlatformAdapter(account.platform);
+      const since = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
       const logs = await prisma.publishLog.findMany({
-        where: { accountId: account.id, success: true, platformPostId: { not: null } },
+        where: {
+          accountId: account.id,
+          success: true,
+          platformPostId: { not: null },
+          attemptedAt: { gte: since },
+        },
         select: { postId: true, platformPostId: true },
       });
 
@@ -55,6 +61,8 @@ export const analyticsService = {
       });
       const snapshotDate = toMidnight(new Date());
 
+      // followerCount는 DB 저장값 사용 (tokenRefreshJob이 주기적으로 갱신)
+      // impressions/reach/engagement는 adapter.getAccountAnalytics()에서 실시간 수집
       await prisma.accountAnalyticsSnapshot.upsert({
         where: { accountId_snapshotDate: { accountId: account.id, snapshotDate } },
         update: {

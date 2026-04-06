@@ -23,5 +23,9 @@ export async function engagePollJob(): Promise<void> {
     }
   }
 
-  logger.info(`[engage-poll] 완료 — 처리: ${processed}, 실패: ${failed}`);
+  if (failed > 0) {
+    logger.warn(`[engage-poll] 완료 — 처리: ${processed}, 실패: ${failed}`);
+  } else {
+    logger.info(`[engage-poll] 완료 — 처리: ${processed}, 실패: ${failed}`);
+  }
 }
