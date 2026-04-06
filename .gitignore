@@ -3,4 +3,5 @@ node_modules
 /src/generated/prisma
 
 public/uploads/*
+.superpowers/
 !public/uploads/.gitkeep
