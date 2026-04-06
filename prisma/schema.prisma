@@ -106,6 +106,7 @@ model PostAnalytics {
 
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
+  @@unique([postId, platform])
   @@index([postId])
   @@index([platform])
   @@index([fetchedAt])

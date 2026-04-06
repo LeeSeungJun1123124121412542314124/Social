@@ -25,12 +25,10 @@ export const analyticsService = {
         if (!log.platformPostId) continue;
         try {
           const analytics = await adapter.getPostAnalytics(account, log.platformPostId);
-          const analyticsId = `${log.postId}_${account.platform}`;
           await prisma.postAnalytics.upsert({
-            where: { id: analyticsId },
+            where: { postId_platform: { postId: log.postId, platform: account.platform } },
             update: { ...analytics, fetchedAt: new Date() },
             create: {
-              id: analyticsId,
               postId: log.postId,
               platform: account.platform,
               ...analytics,
