@@ -23,7 +23,7 @@ export class FluxProvider implements ImageProvider {
         num_images: count,
         image_size: imageSize,
       },
-    });
+    }) as { data: { images: Array<{ url: string }> } };
 
     const urls: string[] = [];
     for (const img of result.data.images) {

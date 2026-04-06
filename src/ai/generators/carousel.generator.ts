@@ -36,6 +36,10 @@ ${input.additionalContext ? `추가 정보: ${input.additionalContext}` : ""}
       slides: Array<{ order: number; text: string }>;
     };
 
+    if (!Array.isArray(parsed.slides) || !parsed.caption) {
+      throw new Error("캐러셀 JSON 구조 오류: slides 또는 caption 없음");
+    }
+
     return {
       slides: parsed.slides.map((s) => ({ order: s.order, text: s.text })),
       caption: parsed.caption,

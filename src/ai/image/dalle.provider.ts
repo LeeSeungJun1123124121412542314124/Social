@@ -12,28 +12,18 @@ export class DalleProvider implements ImageProvider {
     const count = options?.count ?? 1;
     const size = this.resolveSize(options?.width, options?.height);
 
-    const response = await this.client.images.generate({
-      model: "dall-e-3",
-      prompt,
-      n: 1, // dall-e-3는 n=1만 지원, 여러 장은 반복 호출
-      size,
-      response_format: "url",
-    });
-
-    // 여러 장 요청 시 순차 생성
+    // dall-e-3는 n=1만 지원하므로 count만큼 반복 호출
     const urls: string[] = [];
     for (let i = 0; i < count; i++) {
-      const res = i === 0
-        ? response
-        : await this.client.images.generate({
-            model: "dall-e-3",
-            prompt,
-            n: 1,
-            size,
-            response_format: "url",
-          });
+      const response = await this.client.images.generate({
+        model: "dall-e-3",
+        prompt,
+        n: 1,
+        size,
+        response_format: "url",
+      });
 
-      const remoteUrl = res.data?.[0]?.url;
+      const remoteUrl = response.data?.[0]?.url;
       if (!remoteUrl) throw new Error("DALL-E 이미지 URL 없음");
 
       // 로컬에 저장 (dall-e URL은 1시간 후 만료)
