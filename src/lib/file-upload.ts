@@ -15,7 +15,13 @@ export async function saveRemoteImage(
   if (!res.ok) throw new Error(`이미지 다운로드 실패: ${res.status}`);
 
   const buffer = Buffer.from(await res.arrayBuffer());
-  const ext = url.includes(".webp") ? "webp" : "png";
+  const contentType = res.headers.get("content-type") ?? "";
+  const extMap: Record<string, string> = {
+    "image/webp": "webp",
+    "image/jpeg": "jpg",
+    "image/gif": "gif",
+  };
+  const ext = extMap[contentType] ?? "png";
   const name =
     filename ??
     `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
