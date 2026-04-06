@@ -22,7 +22,7 @@ export interface TextContent {
 }
 
 export interface CarouselSlide {
-  imageUrl: string;
+  imageUrl?: string;
   text?: string;
   order: number;
 }
@@ -97,4 +97,28 @@ export interface GeneratedBlog {
   excerpt: string;
   tags: string[];
   wordCount: number;
+}
+
+// BulkPlan 타입 (Task B2에서 사용)
+export interface BulkIdeaItem {
+  title: string;
+  topic: string;
+  platform: PlatformType;
+  contentType: ContentType;
+  suggestedTone: string;
+  hashtags: string[];
+}
+
+export interface BulkPlan {
+  theme: string;
+  ideas: BulkIdeaItem[];
+}
+
+// RepurposeResult 타입 (Task B3에서 사용)
+export interface RepurposeResult {
+  format: ContentType;
+  platform?: PlatformType;
+  title?: string;
+  text: string;
+  hashtags?: string[];
 }
