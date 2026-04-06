@@ -24,7 +24,7 @@ export class InstagramAdapter implements PlatformAdapter {
   readonly platform: PlatformType = "instagram";
   private readonly baseUrl = "https://graph.instagram.com/v21.0";
 
-  getAuthUrl(state?: string): string {
+  getAuthUrl(state?: string, _codeChallenge?: string): string {
     const config = getPlatformOAuthConfig("instagram");
     if (!config?.clientId) {
       throw new AppError(
@@ -43,7 +43,7 @@ export class InstagramAdapter implements PlatformAdapter {
     return `${config.authUrl}?${params.toString()}`;
   }
 
-  async exchangeToken(code: string): Promise<TokenResult> {
+  async exchangeToken(code: string, _codeVerifier?: string): Promise<TokenResult> {
     const config = getPlatformOAuthConfig("instagram");
     if (!config) throw new AppError("Instagram 설정 없음", ErrorCode.OAUTH_FAILED);
 
