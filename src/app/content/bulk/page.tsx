@@ -122,7 +122,12 @@ export default function BulkPage() {
               <Card key={i} className="cursor-pointer hover:border-primary transition-colors" onClick={() => handleUseIdea(idea)}>
                 <CardContent className="p-4 space-y-2">
                   <div className="flex items-start justify-between gap-2">
-                    <p className="font-medium text-sm">{idea.title}</p>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-[10px] font-bold">
+                        {i + 1}
+                      </span>
+                      <p className="font-medium text-sm">{idea.title}</p>
+                    </div>
                     <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
                   </div>
                   <p className="text-xs text-muted-foreground line-clamp-2">{idea.topic}</p>

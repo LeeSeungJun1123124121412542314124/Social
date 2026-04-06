@@ -106,7 +106,7 @@ function CarouselContent() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
+        <TabsList className="rounded-full bg-muted p-1">
           <TabsTrigger value="generate">생성</TabsTrigger>
           <TabsTrigger value="edit" disabled={!result}>편집</TabsTrigger>
           <TabsTrigger value="preview" disabled={!result}>미리보기</TabsTrigger>
@@ -185,12 +185,16 @@ function CarouselContent() {
             <div className="space-y-4">
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {result.slides.map((slide, i) => (
-                  <CarouselSlideCard
-                    key={slide.order}
-                    slide={slide}
-                    index={i}
-                    onChange={(updated) => handleSlideChange(i, updated)}
-                  />
+                  <div key={slide.order} className="relative">
+                    <span className="absolute -top-2 -left-2 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground text-[10px] font-bold shadow-sm">
+                      {i + 1}
+                    </span>
+                    <CarouselSlideCard
+                      slide={slide}
+                      index={i}
+                      onChange={(updated) => handleSlideChange(i, updated)}
+                    />
+                  </div>
                 ))}
               </div>
 
