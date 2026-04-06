@@ -5,7 +5,8 @@ import { analyticsService } from "@/services/analytics.service";
 export const GET = apiHandler(async (req) => {
   const { searchParams } = new URL(req.url);
   const platform = searchParams.get("platform") ?? "all";
-  const days = Number(searchParams.get("days") ?? "30");
+  const daysRaw = Number(searchParams.get("days") ?? "30");
+  const days = isNaN(daysRaw) || daysRaw <= 0 ? 30 : Math.min(daysRaw, 365);
   const data = await analyticsService.getDashboard(platform, days);
   return successResponse(data);
 });
