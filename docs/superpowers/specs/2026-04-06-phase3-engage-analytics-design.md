@@ -6,6 +6,36 @@
 
 ---
 
+## 0. 선행 작업: SQLite → PostgreSQL 마이그레이션
+
+Phase 3 구현 전 DB 엔진을 교체한다.
+
+**변경 파일:**
+
+```
+.env                    DATABASE_URL 추가
+prisma/schema.prisma    provider = "postgresql" + url = env("DATABASE_URL")
+src/lib/prisma.ts       PrismaLibSql 어댑터 제거 → 표준 PrismaClient
+package.json            @prisma/adapter-libsql 의존성 제거
+```
+
+**CONNECTION STRING:**
+```
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/Social"
+```
+
+**마이그레이션 절차:**
+```bash
+# 1. schema.prisma datasource 변경 후
+npx prisma migrate dev --name init
+# 2. 클라이언트 재생성
+npx prisma generate
+```
+
+> 기존 SQLite data.db는 개발 데이터이므로 폐기. 운영 데이터 없음.
+
+---
+
 ## 1. 범위
 
 ### 포함
