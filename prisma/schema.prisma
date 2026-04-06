@@ -152,6 +152,7 @@ model AutoReplyRule {
   templateReply String?  // AI 미사용 시 고정 응답
   salesKeywords String?  // JSON array - 세일즈 감지 키워드
   notifyOnSales Boolean  @default(true)
+  autoSend      Boolean  @default(false)  // 규칙 매칭 시 자동 발송 여부
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -191,6 +192,44 @@ model Notification {
 
   @@index([read])
   @@index([createdAt])
+}
+
+// 댓글/DM 수신함 항목
+model EngageItem {
+  id             String    @id @default(cuid())
+  platform       String    // instagram | threads | tiktok | youtube | x
+  triggerType    String    // comment | dm
+  platformItemId String    // 플랫폼 고유 ID (중복 수집 방지)
+  platformPostId String?   // 댓글의 원본 게시물 ID
+  authorId       String?
+  authorName     String?
+  text           String
+  aiDraft        String?   // AI 생성 응답 초안
+  flaggedSales   Boolean   @default(false)
+  status         String    @default("pending") // pending | replied | ignored
+  autoSent       Boolean   @default(false)
+  repliedAt      DateTime?
+  fetchedAt      DateTime  @default(now())
+
+  @@unique([platform, platformItemId])
+  @@index([platform, status])
+  @@index([flaggedSales])
+  @@index([fetchedAt])
+}
+
+// 계정 레벨 일별 성과 스냅샷 (추이 차트용)
+model AccountAnalyticsSnapshot {
+  id           String   @id @default(cuid())
+  accountId    String
+  platform     String
+  followers    Int      @default(0)
+  impressions  Int      @default(0)
+  reach        Int      @default(0)
+  engagement   Int      @default(0)
+  snapshotDate DateTime // 저장 전 자정(00:00:00.000Z)으로 정규화
+
+  @@unique([accountId, snapshotDate])
+  @@index([platform, snapshotDate])
 }
 
 // 앱 전역 설정 (1인용 - 단일 레코드)
