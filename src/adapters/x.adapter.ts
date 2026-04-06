@@ -15,8 +15,6 @@ import type { SocialAccount } from "@/generated/prisma/client";
 import { AppError, ErrorCode } from "@/lib/error";
 import { decrypt } from "@/lib/encryption";
 import { getPlatformOAuthConfig } from "@/config/platforms.config";
-import { generateCodeChallenge } from "@/lib/pkce";
-
 export class XAdapter implements PlatformAdapter {
   readonly platform: PlatformType = "x";
   private readonly baseUrl = "https://api.twitter.com/2";
@@ -26,16 +24,17 @@ export class XAdapter implements PlatformAdapter {
     if (!config?.clientId) {
       throw new AppError("X OAuth가 설정되지 않았습니다.", ErrorCode.OAUTH_FAILED, 500);
     }
+    if (!codeChallenge) {
+      throw new AppError("X OAuth: code_challenge 없음 (PKCE 필수)", ErrorCode.OAUTH_FAILED);
+    }
 
-    // codeChallenge가 없으면 임시 verifier로 생성 (실제론 항상 PKCE 플랫폼에서 전달됨)
-    const challenge = codeChallenge ?? generateCodeChallenge("default");
     const params = new URLSearchParams({
       response_type: "code",
       client_id: config.clientId,
       redirect_uri: `${process.env.APP_URL}${config.callbackPath}`,
       scope: config.scopes.join(" "),
       state: state ?? "state",
-      code_challenge: challenge,
+      code_challenge: codeChallenge,
       code_challenge_method: "S256",
     });
     return `${config.authUrl}?${params.toString()}`;

@@ -50,8 +50,10 @@ export async function GET(
   } catch (err) {
     logger.error(`계정 연동 실패 (${platform}):`, err);
     const message = err instanceof Error ? err.message : "연동 실패";
-    return NextResponse.redirect(
+    const errResponse = NextResponse.redirect(
       `${process.env.APP_URL}/accounts?error=${encodeURIComponent(message)}`
     );
+    errResponse.cookies.delete(`pkce_verifier_${platform}`);
+    return errResponse;
   }
 }
