@@ -22,7 +22,7 @@ export function CarouselPreview({ slides, caption }: Props) {
       {/* 슬라이드 뷰어 */}
       <div className="relative bg-muted rounded-xl aspect-square max-w-sm mx-auto overflow-hidden">
         {slide.imageUrl ? (
-          <Image src={slide.imageUrl} alt={`슬라이드 ${current + 1}`} fill className="object-cover" />
+          <Image src={slide.imageUrl} alt={`슬라이드 ${current + 1}`} fill className="object-cover" unoptimized={slide.imageUrl.startsWith("https://")} />
         ) : (
           <div className="flex items-center justify-center h-full text-muted-foreground">
             이미지 없음

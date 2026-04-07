@@ -22,6 +22,7 @@ export function CarouselSlideCard({ slide, index, onChange }: Props) {
             alt={`슬라이드 ${index + 1}`}
             fill
             className="object-cover"
+            unoptimized={slide.imageUrl.startsWith("https://")}
           />
         ) : (
           <div className="flex items-center justify-center h-full text-muted-foreground text-sm">
