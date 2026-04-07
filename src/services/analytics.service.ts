@@ -150,7 +150,7 @@ export const analyticsService = {
    */
   async generateWeeklyReport(): Promise<string> {
     const dashboard = await this.getDashboard("all", 7);
-    const llm = getLLMProvider();
+    const llm = await getLLMProvider();
 
     const context = `
 [지난 7일 SNS 성과 요약]

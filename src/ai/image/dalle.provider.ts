@@ -6,7 +6,11 @@ import { saveRemoteImage } from "@/lib/file-upload";
 
 export class DalleProvider implements ImageProvider {
   readonly name = "dalle";
-  private client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  private client: OpenAI;
+
+  constructor(apiKey?: string) {
+    this.client = new OpenAI({ apiKey: apiKey ?? process.env.OPENAI_API_KEY });
+  }
 
   async generateImage(prompt: string, options?: ImageOptions): Promise<ImageResult> {
     const count = options?.count ?? 1;

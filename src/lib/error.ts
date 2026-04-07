@@ -25,6 +25,7 @@ export const ErrorCode = {
   // AI
   AI_GENERATION_FAILED: "AI_GENERATION_FAILED",
   AI_PROVIDER_UNAVAILABLE: "AI_PROVIDER_UNAVAILABLE",
+  AI_KEY_NOT_CONFIGURED: "AI_KEY_NOT_CONFIGURED",
 } as const;
 
 export type ErrorCodeType = (typeof ErrorCode)[keyof typeof ErrorCode];

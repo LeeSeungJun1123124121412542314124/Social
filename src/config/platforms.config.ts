@@ -23,7 +23,7 @@ function buildPlatformConfigs(): Partial<Record<PlatformType, PlatformOAuthConfi
         "instagram_manage_comments",
         "instagram_manage_messages",
       ],
-      callbackPath: "/accounts/connect/instagram/callback",
+      callbackPath: "/api/accounts/callback/instagram",
     },
     threads: {
       clientId: process.env.THREADS_CLIENT_ID ?? "",
@@ -35,7 +35,7 @@ function buildPlatformConfigs(): Partial<Record<PlatformType, PlatformOAuthConfi
         "threads_content_publish",
         "threads_manage_replies",
       ],
-      callbackPath: "/accounts/connect/threads/callback",
+      callbackPath: "/api/accounts/callback/threads",
     },
     tiktok: {
       clientId: process.env.TIKTOK_CLIENT_KEY ?? "",
@@ -43,7 +43,7 @@ function buildPlatformConfigs(): Partial<Record<PlatformType, PlatformOAuthConfi
       authUrl: "https://www.tiktok.com/v2/auth/authorize/",
       tokenUrl: "https://open.tiktokapis.com/v2/oauth/token/",
       scopes: ["user.info.basic", "video.publish", "video.list"],
-      callbackPath: "/accounts/connect/tiktok/callback",
+      callbackPath: "/api/accounts/callback/tiktok",
     },
     youtube: {
       clientId: process.env.YOUTUBE_CLIENT_ID ?? "",
@@ -55,7 +55,7 @@ function buildPlatformConfigs(): Partial<Record<PlatformType, PlatformOAuthConfi
         "https://www.googleapis.com/auth/youtube.readonly",
         "https://www.googleapis.com/auth/youtube.force-ssl",
       ],
-      callbackPath: "/accounts/connect/youtube/callback",
+      callbackPath: "/api/accounts/callback/youtube",
     },
     x: {
       clientId: process.env.X_API_KEY ?? "",
@@ -63,7 +63,7 @@ function buildPlatformConfigs(): Partial<Record<PlatformType, PlatformOAuthConfi
       authUrl: "https://twitter.com/i/oauth2/authorize",
       tokenUrl: "https://api.twitter.com/2/oauth2/token",
       scopes: ["tweet.read", "tweet.write", "users.read", "offline.access"],
-      callbackPath: "/accounts/connect/x/callback",
+      callbackPath: "/api/accounts/callback/x",
     },
   };
 }

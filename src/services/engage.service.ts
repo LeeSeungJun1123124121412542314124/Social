@@ -127,7 +127,7 @@ export const engageService = {
     // AI 초안 생성
     let aiDraft: string | null = null;
     try {
-      const llm = getLLMProvider();
+      const llm = await getLLMProvider();
       aiDraft = await llm.generateText(
         `당신은 병원 SNS 관리자입니다. 아래 ${raw.triggerType === "comment" ? "댓글" : "DM"}에 친절하고 전문적인 한국어로 80자 이내로 답변해주세요.\n\n원문: "${raw.text}"\n\n답변:`,
         { maxTokens: 150 }

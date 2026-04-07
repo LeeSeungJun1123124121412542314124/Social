@@ -19,6 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { CarouselSlideCard } from "@/components/content/CarouselSlideCard";
 import { CarouselPreview } from "@/components/content/CarouselPreview";
+import { useRouter } from "next/navigation";
 import { useCarouselGenerator } from "@/hooks/useContent";
 import type { CarouselSlide, GeneratedCarousel } from "@/types/content.types";
 
@@ -39,7 +40,8 @@ function CarouselContent() {
   const [result, setResult] = useState<GeneratedCarousel | null>(null);
   const [activeTab, setActiveTab] = useState("generate");
 
-  const { generate, loading } = useCarouselGenerator();
+  const { generate, loading, error } = useCarouselGenerator();
+  const router = useRouter();
 
   const handleGenerate = async () => {
     if (!topic.trim()) {
@@ -57,7 +59,15 @@ function CarouselContent() {
       setActiveTab("edit");
       toast.success("카드뉴스가 생성되었습니다.");
     } else {
-      toast.error("생성에 실패했습니다.");
+      const msg = error ?? "생성에 실패했습니다.";
+      if (msg.includes("/settings")) {
+        toast.error(msg, {
+          action: { label: "설정으로 이동", onClick: () => router.push("/settings") },
+          duration: 6000,
+        });
+      } else {
+        toast.error(msg);
+      }
     }
   };
 

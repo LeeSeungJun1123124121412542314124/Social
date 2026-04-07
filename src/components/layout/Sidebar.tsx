@@ -17,6 +17,7 @@ import {
   Sun,
   Moon,
   Sparkles,
+  Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -39,9 +40,13 @@ const manageItems = [
   { label: "댓글/DM", href: "/engage", icon: MessageSquare },
 ];
 
+const systemItems = [
+  { label: "설정", href: "/settings", icon: Settings },
+];
+
 export function Sidebar() {
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -71,21 +76,26 @@ export function Sidebar() {
         {manageItems.map((item) => (
           <SidebarItem key={item.href} {...item} active={isActive(item.href)} />
         ))}
+
+        <NavGroupLabel>시스템</NavGroupLabel>
+        {systemItems.map((item) => (
+          <SidebarItem key={item.href} {...item} active={isActive(item.href)} />
+        ))}
       </nav>
 
       {/* 하단 다크모드 토글 */}
       <div className="border-t p-2">
         <button
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
           className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent/60 hover:text-accent-foreground transition-colors"
           aria-label="다크모드 전환"
         >
-          {theme === "dark" ? (
+          {resolvedTheme === "dark" ? (
             <Sun className="h-4 w-4 shrink-0" />
           ) : (
             <Moon className="h-4 w-4 shrink-0" />
           )}
-          <span>{theme === "dark" ? "라이트 모드" : "다크 모드"}</span>
+          <span>{resolvedTheme === "dark" ? "라이트 모드" : "다크 모드"}</span>
         </button>
       </div>
     </aside>

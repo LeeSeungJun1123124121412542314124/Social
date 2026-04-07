@@ -8,11 +8,16 @@ type FluxImageSize = "square_hd" | "square" | "portrait_4_3" | "portrait_16_9" |
 
 export class FluxProvider implements ImageProvider {
   readonly name = "flux";
+  private apiKey: string;
+
+  constructor(apiKey?: string) {
+    this.apiKey = apiKey ?? process.env.FAL_KEY ?? "";
+  }
 
   async generateImage(prompt: string, options?: ImageOptions): Promise<ImageResult> {
     // fal.ai 동적 import (서버 사이드 전용)
     const { fal } = await import("@fal-ai/client");
-    fal.config({ credentials: process.env.FAL_KEY ?? "" });
+    fal.config({ credentials: this.apiKey });
 
     const count = options?.count ?? 1;
     const imageSize = this.resolveSize(options?.width, options?.height);

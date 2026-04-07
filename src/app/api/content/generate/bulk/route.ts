@@ -5,7 +5,7 @@ import type { BulkInput } from "@/types/content.types";
 
 export const POST = apiHandler(async (req) => {
   const body = await req.json() as BulkInput;
-  const generator = getBulkGenerator();
+  const generator = await getBulkGenerator();
   const result = await generator.generateIdeas(body);
   return successResponse(result);
 });

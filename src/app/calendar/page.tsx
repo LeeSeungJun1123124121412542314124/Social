@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday } from "date-fns";
 import { ko } from "date-fns/locale";
 import { ChevronLeft, ChevronRight, Plus, CalendarDays } from "lucide-react";
@@ -30,6 +31,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function CalendarPage() {
+  const router = useRouter();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedPost, setSelectedPost] = useState<ContentPost | null>(null);
   const { posts, loading } = useContent();
@@ -62,7 +64,7 @@ export default function CalendarPage() {
             예약 발행 일정을 관리합니다.
           </p>
         </div>
-        <Button onClick={() => (window.location.href = "/content/text")}>
+        <Button onClick={() => (router.push("/content/text"))}>
           <Plus className="h-4 w-4 mr-2" />
           새 콘텐츠
         </Button>
@@ -167,7 +169,7 @@ export default function CalendarPage() {
               icon={CalendarDays}
               title="예약된 콘텐츠가 없습니다"
               description="새 콘텐츠를 만들어 발행 일정을 잡아보세요."
-              action={{ label: "새 콘텐츠 만들기", onClick: () => { window.location.href = "/content/text"; } }}
+              action={{ label: "새 콘텐츠 만들기", onClick: () => { router.push("/content/text"); } }}
             />
           ) : (
             <div className="space-y-2">
@@ -235,7 +237,7 @@ export default function CalendarPage() {
                   size="sm"
                   onClick={() => {
                     setSelectedPost(null);
-                    window.location.href = `/content/text`;
+                    router.push("/content/text");
                   }}
                 >
                   수정

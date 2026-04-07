@@ -5,7 +5,7 @@ import type { RepurposeInput } from "@/types/content.types";
 
 export const POST = apiHandler(async (req) => {
   const body = await req.json() as RepurposeInput;
-  const generator = getRepurposeGenerator();
+  const generator = await getRepurposeGenerator();
   const results = await generator.repurpose(body);
   return successResponse(results);
 });

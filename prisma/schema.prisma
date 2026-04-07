@@ -235,11 +235,14 @@ model AccountAnalyticsSnapshot {
 
 // 앱 전역 설정 (1인용 - 단일 레코드)
 model AppSetting {
-  id               String   @id @default("singleton")
-  llmProvider      String   @default("openai")      // openai | anthropic
-  imageProvider    String   @default("flux")         // flux | dalle
-  defaultTone      String   @default("professional_friendly")
-  timezone         String   @default("Asia/Seoul")
-  autoReplyEnabled Boolean  @default(true)
-  updatedAt        DateTime @updatedAt
+  id                    String   @id @default("singleton")
+  llmProvider           String   @default("openai")      // openai | anthropic
+  imageProvider         String   @default("flux")         // flux | dalle
+  encryptedOpenaiKey    String?
+  encryptedAnthropicKey String?
+  encryptedFalKey       String?
+  defaultTone           String   @default("professional_friendly")
+  timezone              String   @default("Asia/Seoul")
+  autoReplyEnabled      Boolean  @default(true)
+  updatedAt             DateTime @updatedAt
 }
