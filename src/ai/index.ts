@@ -26,11 +26,11 @@ export async function getLLMProvider(): Promise<LLMProvider> {
 
   switch (config.llmProvider) {
     case "openai": {
-      const { OpenAIProvider } = require("./providers/openai.provider") as { OpenAIProvider: new (key: string) => LLMProvider };
+      const { OpenAIProvider } = await import("./providers/openai.provider");
       return new OpenAIProvider(apiKey);
     }
     case "anthropic": {
-      const { AnthropicProvider } = require("./providers/anthropic.provider") as { AnthropicProvider: new (key: string) => LLMProvider };
+      const { AnthropicProvider } = await import("./providers/anthropic.provider");
       return new AnthropicProvider(apiKey);
     }
     default:
@@ -41,21 +41,22 @@ export async function getLLMProvider(): Promise<LLMProvider> {
   }
 }
 
-// Image provider 팩토리 (DB 설정 우선, env 폴백)
-export async function getImageProvider(): Promise<ImageProvider> {
+// Image provider 팩토리 (DB 설정 우선, env 폴백, 직접 지정 가능)
+export async function getImageProvider(overrideProvider?: "pollinations" | "dalle" | "flux"): Promise<ImageProvider> {
   const config = await getActiveAIConfig();
+  const imageProvider = overrideProvider ?? config.imageProvider;
 
   // Pollinations는 API 키 불필요 — 바로 반환
-  if (config.imageProvider === "pollinations") {
-    const { PollinationsProvider } = require("./image/pollinations.provider") as { PollinationsProvider: new () => ImageProvider };
+  if (imageProvider === "pollinations") {
+    const { PollinationsProvider } = await import("./image/pollinations.provider");
     return new PollinationsProvider();
   }
 
-  const keyType = config.imageProvider === "dalle" ? "openai" : "fal";
+  const keyType = imageProvider === "dalle" ? "openai" : "fal";
   const apiKey = await getDecryptedKey(keyType);
 
   if (!apiKey) {
-    const keyName = config.imageProvider === "dalle" ? "OpenAI" : "FAL";
+    const keyName = imageProvider === "dalle" ? "OpenAI" : "FAL";
     throw new AppError(
       `이미지 생성 API 키가 설정되지 않았습니다. /settings 페이지에서 ${keyName} API 키를 먼저 설정해주세요.`,
       ErrorCode.AI_KEY_NOT_CONFIGURED,
@@ -63,24 +64,24 @@ export async function getImageProvider(): Promise<ImageProvider> {
     );
   }
 
-  switch (config.imageProvider) {
+  switch (imageProvider) {
     case "dalle": {
-      const { DalleProvider } = require("./image/dalle.provider") as { DalleProvider: new (key: string) => ImageProvider };
+      const { DalleProvider } = await import("./image/dalle.provider");
       return new DalleProvider(apiKey);
     }
     case "flux": {
-      const { FluxProvider } = require("./image/flux.provider") as { FluxProvider: new (key: string) => ImageProvider };
+      const { FluxProvider } = await import("./image/flux.provider");
       return new FluxProvider(apiKey);
     }
     default:
       throw new AppError(
-        `지원하지 않는 이미지 provider: ${config.imageProvider}`,
+        `지원하지 않는 이미지 provider: ${imageProvider}`,
         ErrorCode.AI_PROVIDER_UNAVAILABLE
       );
   }
 }
 
-// 편의 함수 - async 버전
+// 편의 함수
 export async function getTextGenerator(): Promise<TextGenerator> {
   return new TextGenerator(await getLLMProvider());
 }
@@ -99,29 +100,6 @@ export async function getBulkGenerator(): Promise<BulkGenerator> {
 
 export async function getRepurposeGenerator(): Promise<RepurposeGenerator> {
   return new RepurposeGenerator(await getLLMProvider());
-}
-
-// 텍스트 전용 생성기 (이미지 provider 불필요) - LLM만 확인
-export async function getLLMOnlyCarouselGenerator(): Promise<CarouselGenerator> {
-  const llm = await getLLMProvider();
-  // 이미지 없이 텍스트만 생성하는 경우 - 더미 image provider 불필요하므로
-  // imageProvider 키가 없어도 텍스트 생성 가능하도록 처리
-  const config = await getActiveAIConfig();
-  const keyType = config.imageProvider === "dalle" ? "openai" : "fal";
-  const imageKey = await getDecryptedKey(keyType);
-
-  let imageProvider: ImageProvider;
-  if (imageKey) {
-    imageProvider = await getImageProvider();
-  } else {
-    // 이미지 키 없을 때 더미 provider (텍스트만 생성 시 사용)
-    imageProvider = {
-      name: "none",
-      async generateImage() { return { urls: [] }; },
-    };
-  }
-
-  return new CarouselGenerator(llm, imageProvider);
 }
 
 // 하위 호환: ai.config 기반 동기 버전 (스케줄러 등 비UI 코드용)

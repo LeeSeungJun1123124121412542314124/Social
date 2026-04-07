@@ -1,19 +1,25 @@
 import { apiHandler, successResponse } from "@/lib/api-response";
-import { getCarouselGenerator, getLLMOnlyCarouselGenerator } from "@/ai";
+import { getLLMProvider, getImageProvider } from "@/ai";
+import { CarouselGenerator } from "@/ai/generators/carousel.generator";
 import type { GenerateCarouselInput } from "@/types/content.types";
 
 export const POST = apiHandler(async (req) => {
-  const body = await req.json() as GenerateCarouselInput & { generateImages?: boolean };
+  const body = await req.json() as GenerateCarouselInput & {
+    generateImages?: boolean;
+    imageProvider?: "pollinations" | "dalle" | "flux";
+  };
 
-  // 이미지 생성 여부에 따라 generator 선택
-  // generateImages=false면 이미지 API 키 없어도 동작
-  const generator = body.generateImages
-    ? await getCarouselGenerator()
-    : await getLLMOnlyCarouselGenerator();
+  const llm = await getLLMProvider();
 
-  const result = body.generateImages
-    ? await generator.generateWithImages(body)
-    : await generator.generateSlideTexts(body);
-
-  return successResponse(result);
+  if (body.generateImages) {
+    // 요청에서 imageProvider 지정하면 그걸 사용, 없으면 설정 값 사용
+    const imageProvider = await getImageProvider(body.imageProvider);
+    const generator = new CarouselGenerator(llm, imageProvider);
+    return successResponse(await generator.generateWithImages(body));
+  } else {
+    // 텍스트만 생성 — 이미지 provider 불필요 (더미 사용)
+    const dummyImage = { name: "none", async generateImage() { return { urls: [] }; } };
+    const generator = new CarouselGenerator(llm, dummyImage);
+    return successResponse(await generator.generateSlideTexts(body));
+  }
 });

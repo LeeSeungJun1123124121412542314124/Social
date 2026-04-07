@@ -1,7 +1,7 @@
 // src/app/content/carousel/page.tsx
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Wand2, Save, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -21,6 +21,7 @@ import { CarouselSlideCard } from "@/components/content/CarouselSlideCard";
 import { CarouselPreview } from "@/components/content/CarouselPreview";
 import { useRouter } from "next/navigation";
 import { useCarouselGenerator } from "@/hooks/useContent";
+import { useAISettings } from "@/hooks/useSettings";
 import type { CarouselSlide, GeneratedCarousel } from "@/types/content.types";
 
 // 스타일 옵션 — 렌더링마다 재생성 방지를 위해 컴포넌트 외부에 정의
@@ -41,7 +42,16 @@ function CarouselContent() {
   const [activeTab, setActiveTab] = useState("generate");
 
   const { generate, loading, error } = useCarouselGenerator();
+  const { settings: aiSettings } = useAISettings();
+  const [imageProvider, setImageProvider] = useState<"pollinations" | "dalle" | "flux">("pollinations");
   const router = useRouter();
+
+  // 설정에서 불러온 imageProvider를 기본값으로 설정
+  useEffect(() => {
+    if (aiSettings?.imageProvider) {
+      setImageProvider(aiSettings.imageProvider as "pollinations" | "dalle" | "flux");
+    }
+  }, [aiSettings?.imageProvider]);
 
   const handleGenerate = async () => {
     if (!topic.trim()) {
@@ -53,6 +63,7 @@ function CarouselContent() {
       slideCount: parseInt(slideCount),
       style,
       generateImages,
+      imageProvider: generateImages ? imageProvider : undefined,
     });
     if (res) {
       setResult(res);
@@ -165,18 +176,35 @@ function CarouselContent() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 rounded-lg border p-3">
-            <ImageIcon className="h-5 w-5 text-muted-foreground" />
-            <div className="flex-1">
-              <p className="text-sm font-medium">AI 이미지 생성</p>
-              <p className="text-xs text-muted-foreground">
-                DALL-E/FLUX로 각 슬라이드 이미지를 생성합니다 (시간이 걸립니다)
-              </p>
+          <div className="rounded-lg border p-3 space-y-3">
+            <div className="flex items-center gap-3">
+              <ImageIcon className="h-5 w-5 text-muted-foreground" />
+              <div className="flex-1">
+                <p className="text-sm font-medium">AI 이미지 생성</p>
+                <p className="text-xs text-muted-foreground">
+                  슬라이드마다 이미지를 자동 생성합니다
+                </p>
+              </div>
+              <Switch
+                checked={generateImages}
+                onCheckedChange={setGenerateImages}
+              />
             </div>
-            <Switch
-              checked={generateImages}
-              onCheckedChange={setGenerateImages}
-            />
+            {generateImages && (
+              <div className="flex items-center gap-2 pt-1">
+                <span className="text-xs text-muted-foreground w-16 shrink-0">프로바이더</span>
+                <Select value={imageProvider} onValueChange={(v) => setImageProvider(v as typeof imageProvider)}>
+                  <SelectTrigger className="h-8 text-xs">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="pollinations">Pollinations (무료)</SelectItem>
+                    <SelectItem value="dalle">DALL-E 3 (OpenAI)</SelectItem>
+                    <SelectItem value="flux">Flux (fal.ai)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
           </div>
 
           <Button

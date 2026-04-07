@@ -21,13 +21,14 @@ export class AnthropicProvider implements LLMProvider {
 
   async generateText(prompt: string, options?: LLMOptions): Promise<string> {
     try {
-      const response = await this.client.messages.create({
+      const params = {
         model: options?.model ?? aiConfig.anthropicModel,
         max_tokens: options?.maxTokens ?? aiConfig.defaultMaxTokens,
-        system: options?.systemPrompt,
-        messages: [{ role: "user", content: prompt }],
+        messages: [{ role: "user" as const, content: prompt }],
         temperature: options?.temperature ?? aiConfig.defaultTemperature,
-      } as Parameters<typeof this.client.messages.create>[0]) as Anthropic.Message;
+        ...(options?.systemPrompt ? { system: options.systemPrompt } : {}),
+      };
+      const response = await this.client.messages.create(params) as Anthropic.Message;
 
       const content = response.content[0];
       return content?.type === "text" ? content.text : "";
@@ -44,12 +45,13 @@ export class AnthropicProvider implements LLMProvider {
     options?: LLMOptions
   ): AsyncIterable<string> {
     try {
-      const stream = await this.client.messages.stream({
+      const streamParams = {
         model: options?.model ?? aiConfig.anthropicModel,
         max_tokens: options?.maxTokens ?? aiConfig.defaultMaxTokens,
-        system: options?.systemPrompt,
-        messages: [{ role: "user", content: prompt }],
-      });
+        messages: [{ role: "user" as const, content: prompt }],
+        ...(options?.systemPrompt ? { system: options.systemPrompt } : {}),
+      };
+      const stream = await this.client.messages.stream(streamParams);
 
       for await (const chunk of stream) {
         if (

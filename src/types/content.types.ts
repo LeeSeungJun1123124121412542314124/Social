@@ -62,6 +62,8 @@ export interface GenerateCarouselInput {
   slideCount?: number;
   style?: string;
   additionalContext?: string;
+  generateImages?: boolean;
+  imageProvider?: "pollinations" | "dalle" | "flux";
 }
 
 export interface GenerateBlogInput {

@@ -78,7 +78,7 @@ export function useCarouselGenerator() {
 
   const generate = useCallback(
     async (
-      input: GenerateCarouselInput & { generateImages?: boolean }
+      input: GenerateCarouselInput
     ): Promise<GeneratedCarousel | null> => {
       setLoading(true);
       setError(null);

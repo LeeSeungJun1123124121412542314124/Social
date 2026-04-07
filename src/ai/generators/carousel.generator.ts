@@ -2,6 +2,7 @@
 import type { LLMProvider } from "../ai.provider";
 import type { ImageProvider } from "../image/image.provider";
 import type { GenerateCarouselInput, GeneratedCarousel, CarouselSlide } from "@/types/content.types";
+import { AppError, ErrorCode } from "@/lib/error";
 
 export class CarouselGenerator {
   constructor(
@@ -29,15 +30,17 @@ ${input.additionalContext ? `추가 정보: ${input.additionalContext}` : ""}
     const raw = await this.llm.generateText(prompt, { temperature: 0.7 });
 
     const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error("캐러셀 JSON 파싱 실패");
+    if (!jsonMatch) throw new AppError("AI 응답에서 JSON을 찾지 못했습니다. 다시 시도해주세요.", ErrorCode.AI_GENERATION_FAILED, 500);
 
-    const parsed = JSON.parse(jsonMatch[0]) as {
-      caption: string;
-      slides: Array<{ order: number; text: string }>;
-    };
+    let parsed: { caption: string; slides: Array<{ order: number; text: string }> };
+    try {
+      parsed = JSON.parse(jsonMatch[0]) as typeof parsed;
+    } catch {
+      throw new AppError("AI 응답 JSON 파싱 실패. 다시 시도해주세요.", ErrorCode.AI_GENERATION_FAILED, 500);
+    }
 
     if (!Array.isArray(parsed.slides) || !parsed.caption) {
-      throw new Error("캐러셀 JSON 구조 오류: slides 또는 caption 없음");
+      throw new AppError("AI 응답 구조 오류 (slides 또는 caption 없음). 다시 시도해주세요.", ErrorCode.AI_GENERATION_FAILED, 500);
     }
 
     return {
