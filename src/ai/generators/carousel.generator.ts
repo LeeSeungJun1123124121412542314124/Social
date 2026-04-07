@@ -22,7 +22,7 @@ ${input.additionalContext ? `추가 정보: ${input.additionalContext}` : ""}
 {
   "caption": "전체 캡션 (해시태그 포함)",
   "slides": [
-    { "order": 1, "text": "슬라이드 1 텍스트" },
+    { "order": 1, "text": "슬라이드 1 텍스트", "imagePrompt": "English image prompt for slide 1, photorealistic, medical/health concept, no text" },
     ...
   ]
 }`;
@@ -32,7 +32,7 @@ ${input.additionalContext ? `추가 정보: ${input.additionalContext}` : ""}
     const jsonMatch = raw.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new AppError("AI 응답에서 JSON을 찾지 못했습니다. 다시 시도해주세요.", ErrorCode.AI_GENERATION_FAILED, 500);
 
-    let parsed: { caption: string; slides: Array<{ order: number; text: string }> };
+    let parsed: { caption: string; slides: Array<{ order: number; text: string; imagePrompt?: string }> };
     try {
       parsed = JSON.parse(jsonMatch[0]) as typeof parsed;
     } catch {
@@ -44,7 +44,7 @@ ${input.additionalContext ? `추가 정보: ${input.additionalContext}` : ""}
     }
 
     return {
-      slides: parsed.slides.map((s) => ({ order: s.order, text: s.text })),
+      slides: parsed.slides.map((s) => ({ order: s.order, text: s.text, imagePrompt: s.imagePrompt })),
       caption: parsed.caption,
     };
   }
@@ -55,16 +55,19 @@ ${input.additionalContext ? `추가 정보: ${input.additionalContext}` : ""}
   ): Promise<GeneratedCarousel> {
     const textResult = await this.generateSlideTexts(input);
 
-    // 슬라이드별 이미지 순차 생성 (rate limit 방지)
-    const style = input.style ?? "깔끔한 미니멀 디자인, 병원 브랜딩, 한국어 텍스트 제외";
     const slides: CarouselSlide[] = [];
     for (const slide of textResult.slides) {
+      // LLM이 생성한 영문 imagePrompt 사용, 없으면 fallback
+      const imagePrompt = slide.imagePrompt
+        ?? `${input.topic} health care, clean minimal design, no text, professional photo`;
+
       const result = await this.imageProvider.generateImage(
-        `${input.topic} - ${slide.text?.substring(0, 50) ?? ""}. ${style}`,
+        imagePrompt,
         { width: 1080, height: 1080, count: 1 }
       );
       slides.push({ ...slide, imageUrl: result.urls[0] });
-      // Pollinations rate limit 방지 (슬라이드 사이 1초 대기)
+
+      // Pollinations rate limit 방지
       if (this.imageProvider.name === "pollinations") {
         await new Promise((r) => setTimeout(r, 1000));
       }

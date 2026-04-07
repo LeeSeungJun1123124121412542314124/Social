@@ -25,6 +25,7 @@ export interface CarouselSlide {
   imageUrl?: string;
   text?: string;
   order: number;
+  imagePrompt?: string;
 }
 
 export interface CarouselContent {

@@ -42,9 +42,7 @@ export class PollinationsProvider implements ImageProvider {
     const width = options?.width ?? 1024;
     const height = options?.height ?? 1024;
 
-    // 프롬프트를 영어로 짧게 제한 (URL 길이 및 인식률)
-    const safePrompt = prompt.replace(/[^\x00-\x7F]/g, "").trim().substring(0, 200) || "medical health care";
-    const encodedPrompt = encodeURIComponent(safePrompt);
+    const encodedPrompt = encodeURIComponent(prompt.substring(0, 300));
     const urls: string[] = [];
 
     for (let i = 0; i < count; i++) {
