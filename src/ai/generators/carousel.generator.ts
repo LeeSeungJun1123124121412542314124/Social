@@ -55,21 +55,20 @@ ${input.additionalContext ? `추가 정보: ${input.additionalContext}` : ""}
   ): Promise<GeneratedCarousel> {
     const textResult = await this.generateSlideTexts(input);
 
-    // 슬라이드별 이미지 프롬프트 생성
+    // 슬라이드별 이미지 순차 생성 (rate limit 방지)
     const style = input.style ?? "깔끔한 미니멀 디자인, 병원 브랜딩, 한국어 텍스트 제외";
-    const imageResults = await Promise.all(
-      textResult.slides.map((slide) =>
-        this.imageProvider.generateImage(
-          `${input.topic} - ${slide.text ?? ""}. ${style}`,
-          { width: 1080, height: 1080, count: 1 }
-        )
-      )
-    );
-
-    const slides: CarouselSlide[] = textResult.slides.map((slide, i) => ({
-      ...slide,
-      imageUrl: imageResults[i]?.urls[0],
-    }));
+    const slides: CarouselSlide[] = [];
+    for (const slide of textResult.slides) {
+      const result = await this.imageProvider.generateImage(
+        `${input.topic} - ${slide.text?.substring(0, 50) ?? ""}. ${style}`,
+        { width: 1080, height: 1080, count: 1 }
+      );
+      slides.push({ ...slide, imageUrl: result.urls[0] });
+      // Pollinations rate limit 방지 (슬라이드 사이 1초 대기)
+      if (this.imageProvider.name === "pollinations") {
+        await new Promise((r) => setTimeout(r, 1000));
+      }
+    }
 
     return { slides, caption: textResult.caption };
   }
