@@ -146,6 +146,6 @@ export const contentService = {
       },
       orderBy: { createdAt: "desc" },
       take: limit,
-    })
+    });
   },
 };
