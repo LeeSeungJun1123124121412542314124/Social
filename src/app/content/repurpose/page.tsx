@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { RefreshCw, Copy, Save, Check, Repeat2 } from "lucide-react";
+import { RefreshCw, Copy, Check, Repeat2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -20,6 +20,9 @@ import { useRepurposeGenerator } from "@/hooks/useContent";
 import { PLATFORMS, PLATFORM_TYPES } from "@/lib/constants";
 import type { ContentType, RepurposeResult } from "@/types/content.types";
 import type { PlatformType } from "@/types/platform.types";
+import { useContentHistory } from "@/hooks/useContentHistory";
+import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
+import type { HistoryPost } from "@/hooks/useContentHistory";
 
 const SOURCE_TYPES = [
   { value: "blog", label: "블로그 아티클" },
@@ -44,6 +47,7 @@ export default function RepurposePage() {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const { repurpose, loading } = useRepurposeGenerator();
+  const { history, historyLoading, autoSave } = useContentHistory("repurpose");
 
   const toggleFormat = (f: ContentType) =>
     setSelectedFormats((prev) => prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]);
@@ -61,7 +65,14 @@ export default function RepurposePage() {
       targetFormats: selectedFormats,
       targetPlatforms: selectedPlatforms,
     });
-    if (res) { setResults(res); toast.success(`${res.length}개 형식으로 변환되었습니다.`); }
+    if (res) {
+      setResults(res);
+      toast.success(`${res.length}개 형식으로 변환되었습니다.`);
+      void autoSave({
+        title: sourceContent.substring(0, 50),
+        contentData: JSON.stringify(res),
+      });
+    }
     else toast.error("변환에 실패했습니다.");
   };
 
@@ -72,22 +83,15 @@ export default function RepurposePage() {
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
-  const handleSave = async (result: RepurposeResult) => {
+  const handleRestore = (post: HistoryPost) => {
     try {
-      const res = await window.fetch("/api/content", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: result.format,
-          title: result.title ?? `리퍼포징: ${sourceContent.substring(0, 30)}`,
-          contentText: result.text,
-        }),
-      });
-      if (!res.ok) throw new Error(`저장 요청 실패: ${res.status}`);
-      const data = await res.json() as { success: boolean };
-      if (data.success) toast.success("저장되었습니다.");
-      else toast.error("저장에 실패했습니다.");
-    } catch { toast.error("저장에 실패했습니다."); }
+      const restored = JSON.parse(post.contentData ?? "[]") as RepurposeResult[];
+      if (!Array.isArray(restored)) throw new Error("잘못된 데이터");
+      setResults(restored);
+      toast.success("이전 결과를 복원했습니다.");
+    } catch {
+      toast.error("복원에 실패했습니다.");
+    }
   };
 
   return (
@@ -214,9 +218,6 @@ export default function RepurposePage() {
                         )}
                         {copiedIndex === i ? "복사됨" : "복사"}
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => handleSave(result)}>
-                        <Save className="h-3.5 w-3.5 mr-1.5" />저장
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -225,6 +226,11 @@ export default function RepurposePage() {
           )}
         </div>
       </div>
+      <ContentHistoryPanel
+        history={history}
+        loading={historyLoading}
+        onRestore={handleRestore}
+      />
     </div>
   );
 }
