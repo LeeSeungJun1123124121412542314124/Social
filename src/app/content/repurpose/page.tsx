@@ -20,9 +20,8 @@ import { useRepurposeGenerator } from "@/hooks/useContent";
 import { PLATFORMS, PLATFORM_TYPES } from "@/lib/constants";
 import type { ContentType, RepurposeResult } from "@/types/content.types";
 import type { PlatformType } from "@/types/platform.types";
-import { useContentHistory } from "@/hooks/useContentHistory";
+import { useContentHistory, type HistoryPost } from "@/hooks/useContentHistory";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
-import type { HistoryPost } from "@/hooks/useContentHistory";
 
 const SOURCE_TYPES = [
   { value: "blog", label: "블로그 아티클" },
@@ -30,6 +29,8 @@ const SOURCE_TYPES = [
   { value: "idea", label: "아이디어/메모" },
   { value: "script", label: "강의/발표 스크립트" },
 ] as const;
+
+type SourceType = (typeof SOURCE_TYPES)[number]["value"];
 
 const TARGET_FORMATS: { value: ContentType; label: string }[] = [
   { value: "text", label: "SNS 텍스트" },
@@ -39,7 +40,7 @@ const TARGET_FORMATS: { value: ContentType; label: string }[] = [
 ];
 
 export default function RepurposePage() {
-  const [sourceType, setSourceType] = useState<"blog" | "video" | "idea" | "script">("blog");
+  const [sourceType, setSourceType] = useState<SourceType>("blog");
   const [sourceContent, setSourceContent] = useState("");
   const [selectedFormats, setSelectedFormats] = useState<ContentType[]>(["text"]);
   const [selectedPlatforms, setSelectedPlatforms] = useState<PlatformType[]>(["instagram"]);
