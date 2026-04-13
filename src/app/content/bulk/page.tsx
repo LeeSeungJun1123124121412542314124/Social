@@ -15,6 +15,9 @@ import { PLATFORMS, PLATFORM_TYPES } from "@/lib/constants";
 import type { BulkPlan, BulkIdeaItem } from "@/types/content.types";
 import type { PlatformType } from "@/types/platform.types";
 import { useRouter } from "next/navigation";
+import { useContentHistory } from "@/hooks/useContentHistory";
+import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
+import type { HistoryPost } from "@/hooks/useContentHistory";
 
 const TYPE_LABELS: Record<string, string> = {
   text: "텍스트",
@@ -31,6 +34,7 @@ export default function BulkPage() {
   const [selectedPlatforms, setSelectedPlatforms] = useState<PlatformType[]>(["instagram"]);
   const [result, setResult] = useState<BulkPlan | null>(null);
   const { generate, loading } = useBulkGenerator();
+  const { history, historyLoading, autoSave } = useContentHistory("bulk");
   const router = useRouter();
 
   const togglePlatform = (p: PlatformType) => {
@@ -43,8 +47,14 @@ export default function BulkPage() {
     if (!theme.trim()) { toast.error("테마를 입력해주세요."); return; }
     if (selectedPlatforms.length === 0) { toast.error("플랫폼을 선택해주세요."); return; }
     const res = await generate({ theme, count: parseInt(count), platforms: selectedPlatforms, period });
-    if (res) { setResult(res); toast.success(`${res.ideas.length}개 아이디어가 생성되었습니다.`); }
-    else toast.error("생성에 실패했습니다.");
+    if (res) {
+      setResult(res);
+      toast.success(`${res.ideas.length}개 아이디어가 생성되었습니다.`);
+      void autoSave({
+        title: theme.substring(0, 50),
+        contentData: JSON.stringify(res),
+      });
+    } else toast.error("생성에 실패했습니다.");
   };
 
   const handleUseIdea = (idea: BulkIdeaItem) => {
@@ -52,6 +62,17 @@ export default function BulkPage() {
     if (idea.contentType === "blog") router.push(`/content/blog?${params.toString()}`);
     else if (idea.contentType === "carousel") router.push(`/content/carousel?${params.toString()}`);
     else router.push(`/content/text?${params.toString()}`);
+  };
+
+  const handleRestore = (post: HistoryPost) => {
+    try {
+      const restored = JSON.parse(post.contentData ?? "{}") as BulkPlan;
+      if (!restored.ideas) throw new Error("잘못된 데이터");
+      setResult(restored);
+      toast.success("이전 결과를 복원했습니다.");
+    } catch {
+      toast.error("복원에 실패했습니다.");
+    }
   };
 
   return (
@@ -146,6 +167,11 @@ export default function BulkPage() {
           </div>
         </div>
       )}
+      <ContentHistoryPanel
+        history={history}
+        loading={historyLoading}
+        onRestore={handleRestore}
+      />
     </div>
   );
 }
