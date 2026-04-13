@@ -3,7 +3,7 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Wand2, Copy, Save, Check, Lightbulb, BookOpen } from "lucide-react";
+import { Wand2, Copy, Check, Lightbulb, BookOpen } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useBlogGenerator } from "@/hooks/useContent";
 import type { GeneratedBlog } from "@/types/content.types";
+import { useContentHistory } from "@/hooks/useContentHistory";
+import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
+import type { HistoryPost } from "@/hooks/useContentHistory";
 
 const TIPS = [
   "제목에 핵심 키워드를 포함하면 검색 노출이 높아집니다.",
@@ -31,6 +34,7 @@ function BlogContent() {
   const [showTips, setShowTips] = useState(false);
 
   const { generate, loading } = useBlogGenerator();
+  const { history, historyLoading, autoSave } = useContentHistory("blog");
 
   const handleGenerate = async () => {
     if (!topic.trim()) { toast.error("주제를 입력해주세요."); return; }
@@ -39,7 +43,15 @@ function BlogContent() {
       keywords: keywords ? keywords.split(",").map((k) => k.trim()) : undefined,
       targetLength: parseInt(targetLength),
     });
-    if (res) { setResult(res); toast.success("블로그가 생성되었습니다."); }
+    if (res) {
+      setResult(res);
+      toast.success("블로그가 생성되었습니다.");
+      void autoSave({
+        title: res.title,
+        contentText: res.body,
+        contentData: JSON.stringify({ excerpt: res.excerpt, tags: res.tags, wordCount: res.wordCount }),
+      });
+    }
     else toast.error("생성에 실패했습니다.");
   };
 
@@ -52,27 +64,22 @@ function BlogContent() {
     }
   };
 
-  const handleSave = async () => {
-    if (!result) return;
+  const handleRestore = (post: HistoryPost) => {
     try {
-      const res = await window.fetch("/api/content", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "blog",
-          title: result.title,
-          contentText: result.body,
-          contentData: JSON.stringify({ excerpt: result.excerpt, tags: result.tags }),
-        }),
+      const meta = post.contentData
+        ? (JSON.parse(post.contentData) as { excerpt?: string; tags?: string[]; wordCount?: number })
+        : {};
+      setResult({
+        title: post.title ?? "",
+        body: post.contentText ?? "",
+        excerpt: meta.excerpt ?? "",
+        tags: meta.tags ?? [],
+        wordCount: meta.wordCount ?? (post.contentText?.split(/\s+/).length ?? 0),
       });
-      if (!res.ok) throw new Error(`저장 요청 실패: ${res.status}`);
-      const data = await res.json() as { success: boolean; error?: { message: string } };
-      if (data.success) {
-        toast.success("블로그가 저장되었습니다.");
-      } else {
-        toast.error(data.error?.message ?? "저장에 실패했습니다.");
-      }
-    } catch { toast.error("저장에 실패했습니다."); }
+      toast.success("이전 결과를 복원했습니다.");
+    } catch {
+      toast.error("복원에 실패했습니다.");
+    }
   };
 
   return (
@@ -196,15 +203,17 @@ function BlogContent() {
                     )}
                     {copied ? "복사됨" : "복사"}
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handleSave}>
-                    <Save className="h-3.5 w-3.5 mr-1.5" />저장
-                  </Button>
                 </div>
               </CardContent>
             </Card>
           )}
         </div>
       </div>
+      <ContentHistoryPanel
+        history={history}
+        loading={historyLoading}
+        onRestore={handleRestore}
+      />
     </div>
   );
 }
