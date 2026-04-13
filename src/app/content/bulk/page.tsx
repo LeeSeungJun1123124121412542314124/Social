@@ -59,7 +59,18 @@ export default function BulkPage() {
   const handleUseIdea = (idea: BulkIdeaItem) => {
     // 모든 아이디어는 카드뉴스 랩으로 단일 라우팅.
     // contentType 뱃지는 LLM의 포맷 추천(참고용)으로만 표시.
-    const params = new URLSearchParams({ topic: idea.topic, platform: idea.platform });
+    // LLM이 text 타입 아이디어에 topic을 비워서 반환하는 경우가 있어 title로 폴백.
+    const rawTopic = idea.topic?.trim() ?? "";
+    const fallback = idea.title?.trim() ?? "";
+    const topic = rawTopic || fallback;
+    // 진단용: 원본 LLM 응답의 topic/title 값 확인. 버그 재발 시 DevTools Console에서 확인.
+    console.debug("[bulk→carousel]", {
+      contentType: idea.contentType,
+      topicOriginal: idea.topic,
+      titleOriginal: idea.title,
+      topicUsed: topic,
+    });
+    const params = new URLSearchParams({ topic, platform: idea.platform });
     router.push(`/content/carousel?${params.toString()}`);
   };
 
