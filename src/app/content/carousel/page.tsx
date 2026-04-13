@@ -3,7 +3,7 @@
 
 import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Wand2, Save, ImageIcon } from "lucide-react";
+import { Wand2, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -23,6 +23,9 @@ import { useRouter } from "next/navigation";
 import { useCarouselGenerator } from "@/hooks/useContent";
 import { useAISettings } from "@/hooks/useSettings";
 import type { CarouselSlide, GeneratedCarousel } from "@/types/content.types";
+import { useContentHistory } from "@/hooks/useContentHistory";
+import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
+import type { HistoryPost } from "@/hooks/useContentHistory";
 
 // 스타일 옵션 — 렌더링마다 재생성 방지를 위해 컴포넌트 외부에 정의
 const STYLES = [
@@ -42,6 +45,7 @@ function CarouselContent() {
   const [activeTab, setActiveTab] = useState("generate");
 
   const { generate, loading, error } = useCarouselGenerator();
+  const { history, historyLoading, autoSave } = useContentHistory("carousel");
   const { settings: aiSettings } = useAISettings();
   const [imageProvider, setImageProvider] = useState<"pollinations" | "dalle" | "flux">("pollinations");
   const router = useRouter();
@@ -69,6 +73,11 @@ function CarouselContent() {
       setResult(res);
       setActiveTab("edit");
       toast.success("카드뉴스가 생성되었습니다.");
+      void autoSave({
+        title: topic.substring(0, 50),
+        contentText: res.caption,
+        contentData: JSON.stringify({ slides: res.slides }),
+      });
     } else {
       const msg = error ?? "생성에 실패했습니다.";
       if (msg.includes("/settings")) {
@@ -89,31 +98,19 @@ function CarouselContent() {
     setResult({ ...result, slides });
   };
 
-  const handleSave = async () => {
-    if (!result) return;
+  const handleRestore = (post: HistoryPost) => {
     try {
-      const res = await window.fetch("/api/content", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "carousel",
-          title: topic.substring(0, 50),
-          contentText: result.caption,
-          contentData: JSON.stringify(result.slides),
-          mediaUrls: result.slides
-            .filter((s) => s.imageUrl)
-            .map((s) => s.imageUrl as string),
-        }),
+      const meta = post.contentData
+        ? (JSON.parse(post.contentData) as { slides?: CarouselSlide[] })
+        : {};
+      setResult({
+        caption: post.contentText ?? "",
+        slides: meta.slides ?? [],
       });
-      if (!res.ok) throw new Error(`저장 요청 실패: ${res.status}`);
-      const data = await res.json() as { success: boolean; error?: { message: string } };
-      if (data.success) {
-        toast.success("카드뉴스가 저장되었습니다.");
-      } else {
-        toast.error(data.error?.message ?? "저장에 실패했습니다.");
-      }
+      setActiveTab("edit");
+      toast.success("이전 결과를 복원했습니다.");
     } catch {
-      toast.error("저장에 실패했습니다.");
+      toast.error("복원에 실패했습니다.");
     }
   };
 
@@ -245,10 +242,6 @@ function CarouselContent() {
                 />
               </div>
 
-              <Button onClick={handleSave}>
-                <Save className="h-4 w-4 mr-2" />
-                임시저장
-              </Button>
             </div>
           )}
         </TabsContent>
@@ -260,6 +253,11 @@ function CarouselContent() {
           )}
         </TabsContent>
       </Tabs>
+      <ContentHistoryPanel
+        history={history}
+        loading={historyLoading}
+        onRestore={handleRestore}
+      />
     </div>
   );
 }
