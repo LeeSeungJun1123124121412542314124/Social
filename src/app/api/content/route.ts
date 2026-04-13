@@ -9,7 +9,9 @@ export const GET = apiHandler(async (req) => {
   const status = url.searchParams.get("status") ?? undefined;
   const type = url.searchParams.get("type") ?? undefined;
   const limitStr = url.searchParams.get("limit");
-  const limit = limitStr ? parseInt(limitStr, 10) : undefined;
+  const limitParsed = limitStr !== null ? parseInt(limitStr, 10) : undefined;
+  // NaN(비숫자 입력) 방어 — NaN이면 기본값 5가 적용되도록 undefined 처리
+  const limit = limitParsed !== undefined && Number.isFinite(limitParsed) ? limitParsed : undefined;
 
   if (type !== undefined) {
     const posts = await contentService.getRecentByType(type, limit ?? 5);
