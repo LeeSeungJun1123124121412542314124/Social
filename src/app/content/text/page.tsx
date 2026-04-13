@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Wand2, Copy, Save, Check, Lightbulb } from "lucide-react";
+import { Wand2, Copy, Check, Lightbulb } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,6 +21,9 @@ import { useAccounts } from "@/hooks/useAccounts";
 import { PLATFORMS, PLATFORM_TYPES } from "@/lib/constants";
 import type { PlatformType } from "@/types/platform.types";
 import type { GeneratedText } from "@/types/content.types";
+import { useContentHistory } from "@/hooks/useContentHistory";
+import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
+import type { HistoryPost } from "@/hooks/useContentHistory";
 
 const TIPS = [
   "첫 문장에 핵심을 담아 독자의 주의를 잡으세요.",
@@ -38,6 +41,7 @@ export default function TextContentPage() {
 
   const { generate, loading: generating } = useTextGenerator();
   const { accounts } = useAccounts();
+  const { history, historyLoading, autoSave } = useContentHistory("text");
 
   const connectedPlatforms = new Set(accounts.map((a) => a.platform));
 
@@ -49,6 +53,14 @@ export default function TextContentPage() {
     const generated = await generate({ topic, platform, tone });
     if (generated) {
       setResult(generated);
+      void autoSave({
+        title: topic.substring(0, 50),
+        contentText: generated.text,
+        contentData: JSON.stringify({
+          platform: generated.platform,
+          hashtags: generated.hashtags,
+        }),
+      });
       toast.success("콘텐츠가 생성되었습니다.");
     } else {
       toast.error("생성에 실패했습니다. API 키를 확인하세요.");
@@ -64,24 +76,20 @@ export default function TextContentPage() {
     }
   };
 
-  const handleSave = async () => {
-    if (!result) return;
+  const handleRestore = (post: HistoryPost) => {
     try {
-      const res = await fetch("/api/content", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "text",
-          title: topic.substring(0, 50),
-          contentText: result.text,
-        }),
+      const meta = post.contentData
+        ? (JSON.parse(post.contentData) as { platform?: string; hashtags?: string[] })
+        : {};
+      setResult({
+        text: post.contentText ?? "",
+        platform: (meta.platform ?? platform) as PlatformType,
+        characterCount: post.contentText?.length ?? 0,
+        hashtags: meta.hashtags,
       });
-      const data = await res.json() as { success: boolean };
-      if (data.success) {
-        toast.success("임시저장되었습니다.");
-      }
+      toast.success("이전 결과를 복원했습니다.");
     } catch {
-      toast.error("저장에 실패했습니다.");
+      toast.error("복원에 실패했습니다.");
     }
   };
 
@@ -246,16 +254,17 @@ export default function TextContentPage() {
                     )}
                     {copied ? "복사됨" : "복사"}
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handleSave}>
-                    <Save className="h-3.5 w-3.5 mr-1.5" />
-                    임시저장
-                  </Button>
                 </div>
               </CardContent>
             </Card>
           )}
         </div>
       </div>
+      <ContentHistoryPanel
+        history={history}
+        loading={historyLoading}
+        onRestore={handleRestore}
+      />
     </div>
   );
 }
