@@ -145,7 +145,7 @@ export const contentService = {
         createdAt: true,
       },
       orderBy: { createdAt: "desc" },
-      take: limit,
+      take: Math.min(limit, 50),
     });
   },
 };

@@ -21,9 +21,8 @@ import { useAccounts } from "@/hooks/useAccounts";
 import { PLATFORMS, PLATFORM_TYPES } from "@/lib/constants";
 import type { PlatformType } from "@/types/platform.types";
 import type { GeneratedText } from "@/types/content.types";
-import { useContentHistory } from "@/hooks/useContentHistory";
+import { useContentHistory, type HistoryPost } from "@/hooks/useContentHistory";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
-import type { HistoryPost } from "@/hooks/useContentHistory";
 
 const TIPS = [
   "첫 문장에 핵심을 담아 독자의 주의를 잡으세요.",

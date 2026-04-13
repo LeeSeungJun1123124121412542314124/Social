@@ -23,9 +23,8 @@ import { useRouter } from "next/navigation";
 import { useCarouselGenerator } from "@/hooks/useContent";
 import { useAISettings } from "@/hooks/useSettings";
 import type { CarouselSlide, GeneratedCarousel } from "@/types/content.types";
-import { useContentHistory } from "@/hooks/useContentHistory";
+import { useContentHistory, type HistoryPost } from "@/hooks/useContentHistory";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
-import type { HistoryPost } from "@/hooks/useContentHistory";
 
 // 스타일 옵션 — 렌더링마다 재생성 방지를 위해 컴포넌트 외부에 정의
 const STYLES = [

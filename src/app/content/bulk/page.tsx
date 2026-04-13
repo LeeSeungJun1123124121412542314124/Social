@@ -15,9 +15,8 @@ import { PLATFORMS, PLATFORM_TYPES } from "@/lib/constants";
 import type { BulkPlan, BulkIdeaItem } from "@/types/content.types";
 import type { PlatformType } from "@/types/platform.types";
 import { useRouter } from "next/navigation";
-import { useContentHistory } from "@/hooks/useContentHistory";
+import { useContentHistory, type HistoryPost } from "@/hooks/useContentHistory";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
-import type { HistoryPost } from "@/hooks/useContentHistory";
 
 const TYPE_LABELS: Record<string, string> = {
   text: "텍스트",

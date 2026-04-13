@@ -14,9 +14,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useBlogGenerator } from "@/hooks/useContent";
 import type { GeneratedBlog } from "@/types/content.types";
-import { useContentHistory } from "@/hooks/useContentHistory";
+import { useContentHistory, type HistoryPost } from "@/hooks/useContentHistory";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
-import type { HistoryPost } from "@/hooks/useContentHistory";
 
 const TIPS = [
   "제목에 핵심 키워드를 포함하면 검색 노출이 높아집니다.",
