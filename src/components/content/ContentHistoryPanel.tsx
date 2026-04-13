@@ -58,6 +58,7 @@ export function ContentHistoryPanel({ history, loading, onRestore }: ContentHist
                 variant="ghost"
                 size="sm"
                 className="shrink-0 h-8 gap-1.5 text-xs"
+                aria-label={`${post.title ?? "제목 없음"} 복원`}
                 onClick={() => onRestore(post)}
               >
                 <RotateCcw className="h-3.5 w-3.5" />
