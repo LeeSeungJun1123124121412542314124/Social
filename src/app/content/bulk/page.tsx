@@ -57,10 +57,10 @@ export default function BulkPage() {
   };
 
   const handleUseIdea = (idea: BulkIdeaItem) => {
+    // 모든 아이디어는 카드뉴스 랩으로 단일 라우팅.
+    // contentType 뱃지는 LLM의 포맷 추천(참고용)으로만 표시.
     const params = new URLSearchParams({ topic: idea.topic, platform: idea.platform });
-    if (idea.contentType === "blog") router.push(`/content/blog?${params.toString()}`);
-    else if (idea.contentType === "carousel") router.push(`/content/carousel?${params.toString()}`);
-    else router.push(`/content/text?${params.toString()}`);
+    router.push(`/content/carousel?${params.toString()}`);
   };
 
   const handleRestore = (post: HistoryPost) => {
