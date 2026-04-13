@@ -1,7 +1,7 @@
 // src/app/content/carousel/page.tsx
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { Wand2, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -36,7 +36,8 @@ const STYLES = [
 
 function CarouselContent() {
   const searchParams = useSearchParams();
-  const [topic, setTopic] = useState(searchParams.get("topic") ?? "");
+  const initialTopic = searchParams.get("topic") ?? "";
+  const [topic, setTopic] = useState(initialTopic);
   const [slideCount, setSlideCount] = useState("5");
   const [style, setStyle] = useState("minimal");
   const [generateImages, setGenerateImages] = useState(false);
@@ -48,6 +49,19 @@ function CarouselContent() {
   const { settings: aiSettings } = useAISettings();
   const [imageProvider, setImageProvider] = useState<"pollinations" | "dalle" | "flux">("pollinations");
   const router = useRouter();
+
+  // 대량기획 → 카드뉴스 랩 네비게이션 시 URL topic이 바뀌면 입력란도 동기화.
+  // 단, 사용자가 이미 수동 편집한 내용을 덮어쓰지 않도록 "빈 상태이거나 이전 URL 값과 동일한 경우"만 갱신.
+  const prevUrlTopicRef = useRef(initialTopic);
+  useEffect(() => {
+    const urlTopic = searchParams.get("topic") ?? "";
+    if (urlTopic && (topic === "" || topic === prevUrlTopicRef.current)) {
+      setTopic(urlTopic);
+    }
+    prevUrlTopicRef.current = urlTopic;
+    // searchParams 변경 시에만 실행. topic을 deps에 넣으면 수동 편집 시마다 ref가 갱신되어 의도가 무너짐.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   // 설정에서 불러온 imageProvider를 기본값으로 설정
   useEffect(() => {
