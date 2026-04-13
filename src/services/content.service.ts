@@ -131,4 +131,21 @@ export const contentService = {
       },
     });
   },
+
+  // 타입별 최근 게시물 조회 (히스토리 패널용)
+  async getRecentByType(type: string, limit = 5) {
+    return prisma.post.findMany({
+      where: { type },
+      select: {
+        id: true,
+        title: true,
+        contentText: true,
+        contentData: true,
+        status: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: "desc" },
+      take: limit,
+    })
+  },
 };
