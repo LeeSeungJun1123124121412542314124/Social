@@ -21,5 +21,8 @@ prisma/*.db-journal
 
 # 빌드 캐시
 tsconfig.tsbuildinfo
+
+# Git worktrees
+.worktrees/
 .bkit/runtime/
 .bkit/snapshots/
