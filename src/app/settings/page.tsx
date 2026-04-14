@@ -105,7 +105,13 @@ export default function SettingsPage() {
   };
 
   const handleTest = async (provider: "openai" | "anthropic" | "flux" | "dalle") => {
-    const result = await testConnection(provider);
+    // 저장 전이라도 입력값이 있으면 직접 전달해서 테스트
+    const keyOverride =
+      provider === "openai" || provider === "dalle" ? openaiKey || undefined
+      : provider === "anthropic" ? anthropicKey || undefined
+      : provider === "flux" ? falKey || undefined
+      : undefined;
+    const result = await testConnection(provider, keyOverride);
     if (result.success) {
       toast.success(`${result.message}${result.latencyMs != null ? ` (${result.latencyMs}ms)` : ""}`);
     } else {

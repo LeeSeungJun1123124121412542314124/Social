@@ -42,14 +42,15 @@ export function useAISettings() {
   }, []);
 
   const testConnection = useCallback(async (
-    provider: "openai" | "anthropic" | "flux" | "dalle"
+    provider: "openai" | "anthropic" | "flux" | "dalle",
+    apiKey?: string
   ): Promise<{ success: boolean; message: string; latencyMs?: number }> => {
     setTesting(provider);
     try {
       const res = await fetch("/api/settings/ai/test", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ provider }),
+        body: JSON.stringify({ provider, apiKey }),
       });
       const data = await res.json() as { success: boolean; data: { success: boolean; message: string; latencyMs?: number } };
       return data.success ? data.data : { success: false, message: "요청 실패" };

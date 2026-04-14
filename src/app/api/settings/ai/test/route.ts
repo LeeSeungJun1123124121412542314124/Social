@@ -4,7 +4,7 @@ import { AppError, ErrorCode } from "@/lib/error";
 
 // POST: AI provider 연결 테스트
 export const POST = apiHandler(async (req) => {
-  const { provider } = await req.json() as { provider: string };
+  const { provider, apiKey } = await req.json() as { provider: string; apiKey?: string };
 
   if (!provider) {
     throw new AppError("provider는 필수입니다.", ErrorCode.VALIDATION_ERROR, 400);
@@ -15,6 +15,9 @@ export const POST = apiHandler(async (req) => {
     throw new AppError(`유효하지 않은 provider: ${provider}`, ErrorCode.VALIDATION_ERROR, 400);
   }
 
-  const result = await settingsService.testConnection(provider as "openai" | "anthropic" | "flux" | "dalle");
+  const result = await settingsService.testConnection(
+    provider as "openai" | "anthropic" | "flux" | "dalle",
+    apiKey?.trim() || undefined
+  );
   return successResponse(result);
 });

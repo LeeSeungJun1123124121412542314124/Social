@@ -2,29 +2,21 @@
 "use client";
 
 import { useState } from "react";
-import { Wand2, ChevronRight } from "lucide-react";
+import { Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useBulkGenerator } from "@/hooks/useContent";
 import { PLATFORMS, PLATFORM_TYPES } from "@/lib/constants";
 import type { BulkPlan, BulkIdeaItem } from "@/types/content.types";
 import type { PlatformType } from "@/types/platform.types";
 import { useRouter } from "next/navigation";
+import { createHandoff } from "@/lib/contentHandoff";
 import { useContentHistory, type HistoryPost } from "@/hooks/useContentHistory";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
-
-const TYPE_LABELS: Record<string, string> = {
-  text: "텍스트",
-  carousel: "카드뉴스",
-  blog: "블로그",
-  short_form: "숏폼",
-  thread: "쓰레드",
-};
+import { BulkIdeaCard } from "@/components/content/BulkIdeaCard";
 
 export default function BulkPage() {
   const [theme, setTheme] = useState("");
@@ -56,22 +48,30 @@ export default function BulkPage() {
     } else toast.error("생성에 실패했습니다.");
   };
 
-  const handleUseIdea = (idea: BulkIdeaItem) => {
-    // 모든 아이디어는 카드뉴스 랩으로 단일 라우팅.
-    // contentType 뱃지는 LLM의 포맷 추천(참고용)으로만 표시.
-    // LLM이 text 타입 아이디어에 topic을 비워서 반환하는 경우가 있어 title로 폴백.
-    const rawTopic = idea.topic?.trim() ?? "";
-    const fallback = idea.title?.trim() ?? "";
-    const topic = rawTopic || fallback;
-    // 진단용: 원본 LLM 응답의 topic/title 값 확인. 버그 재발 시 DevTools Console에서 확인.
-    console.debug("[bulk→carousel]", {
-      contentType: idea.contentType,
-      topicOriginal: idea.topic,
-      titleOriginal: idea.title,
-      topicUsed: topic,
+  // 포맷별 라우트. 버튼에서 명시적으로 선택한 포맷으로 이동.
+  const ROUTE_BY_FORMAT: Record<"text" | "carousel" | "blog", string> = {
+    text: "/content/text",
+    carousel: "/content/carousel",
+    blog: "/content/blog",
+  };
+
+  const handleUseIdea = (
+    idea: BulkIdeaItem,
+    format: "text" | "carousel" | "blog",
+    editedTopic: string,
+  ) => {
+    // 편집된 topic 우선. 비어있으면 title로 폴백.
+    const topic = editedTopic.trim() || idea.title?.trim() || "";
+    const key = createHandoff({
+      topic,
+      platform: idea.platform,
+      tone: idea.suggestedTone,
+      title: idea.title,
+      hashtags: idea.hashtags,
     });
-    const params = new URLSearchParams({ topic, platform: idea.platform });
-    router.push(`/content/carousel?${params.toString()}`);
+    const route = ROUTE_BY_FORMAT[format];
+    // 저장 실패(privacy 모드 등)에도 최소한 페이지 이동은 보장
+    router.push(key ? `${route}?handoff=${key}` : route);
   };
 
   const handleRestore = (post: HistoryPost) => {
@@ -150,29 +150,12 @@ export default function BulkPage() {
           <h2 className="font-semibold">{result.theme} — {result.ideas.length}개 아이디어</h2>
           <div className="grid gap-3 sm:grid-cols-2">
             {result.ideas.map((idea, i) => (
-              <Card key={i} className="cursor-pointer hover:border-primary transition-colors" onClick={() => handleUseIdea(idea)}>
-                <CardContent className="p-4 space-y-2">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-[10px] font-bold">
-                        {i + 1}
-                      </span>
-                      <p className="font-medium text-sm">{idea.title}</p>
-                    </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-                  </div>
-                  <p className="text-xs text-muted-foreground line-clamp-2">{idea.topic}</p>
-                  <div className="flex gap-1.5">
-                    <Badge variant="outline" className="text-xs">{PLATFORMS[idea.platform]?.name}</Badge>
-                    <Badge variant="secondary" className="text-xs">{TYPE_LABELS[idea.contentType] ?? idea.contentType}</Badge>
-                  </div>
-                  <div className="flex flex-wrap gap-1">
-                    {idea.hashtags.slice(0, 3).map((h) => (
-                      <span key={h} className="text-xs text-muted-foreground">#{h}</span>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              <BulkIdeaCard
+                key={i}
+                idea={idea}
+                index={i}
+                onSubmit={(fmt, editedTopic) => handleUseIdea(idea, fmt, editedTopic)}
+              />
             ))}
           </div>
         </div>

@@ -79,12 +79,12 @@ export const settingsService = {
     return this.getAISettings();
   },
 
-  async testConnection(provider: "openai" | "anthropic" | "flux" | "dalle"): Promise<TestConnectionResult> {
+  async testConnection(provider: "openai" | "anthropic" | "flux" | "dalle", overrideKey?: string): Promise<TestConnectionResult> {
     const start = Date.now();
 
     try {
       if (provider === "openai" || provider === "dalle") {
-        const apiKey = await getDecryptedKey("openai");
+        const apiKey = overrideKey ?? await getDecryptedKey("openai");
         if (!apiKey) {
           return { success: false, message: "OpenAI API 키가 설정되지 않았습니다." };
         }
@@ -95,7 +95,7 @@ export const settingsService = {
       }
 
       if (provider === "anthropic") {
-        const apiKey = await getDecryptedKey("anthropic");
+        const apiKey = overrideKey ?? await getDecryptedKey("anthropic");
         if (!apiKey) {
           return { success: false, message: "Anthropic API 키가 설정되지 않았습니다." };
         }
@@ -111,7 +111,7 @@ export const settingsService = {
       }
 
       if (provider === "flux") {
-        const apiKey = await getDecryptedKey("fal");
+        const apiKey = overrideKey ?? await getDecryptedKey("fal");
         if (!apiKey) {
           return { success: false, message: "FAL API 키가 설정되지 않았습니다." };
         }

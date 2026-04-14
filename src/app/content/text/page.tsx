@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { Wand2, Copy, Check, Lightbulb } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,8 @@ import type { PlatformType } from "@/types/platform.types";
 import type { GeneratedText } from "@/types/content.types";
 import { useContentHistory, type HistoryPost } from "@/hooks/useContentHistory";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
+import { useSearchParams, useRouter } from "next/navigation";
+import { consumeHandoff } from "@/lib/contentHandoff";
 
 const TIPS = [
   "첫 문장에 핵심을 담아 독자의 주의를 잡으세요.",
@@ -30,7 +32,9 @@ const TIPS = [
   "해시태그는 3~5개가 최적입니다.",
 ];
 
-export default function TextContentPage() {
+function TextContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [topic, setTopic] = useState("");
   const [platform, setPlatform] = useState<PlatformType>("instagram");
   const [tone, setTone] = useState("professional_friendly");
@@ -43,6 +47,17 @@ export default function TextContentPage() {
   const { history, historyLoading, autoSave } = useContentHistory("text");
 
   const connectedPlatforms = new Set(accounts.map((a) => a.platform));
+
+  // 대량기획에서 핸드오프 키로 도착한 경우 topic/platform을 항상 덮어씌운다.
+  useEffect(() => {
+    const key = searchParams.get("handoff");
+    const payload = consumeHandoff(key);
+    if (!payload) return;
+    setTopic(payload.topic);
+    if (payload.platform) setPlatform(payload.platform);
+    // tone은 LLM suggestedTone이 자유 서술이라 Select 옵션과 다를 수 있어 덮어쓰지 않음
+    router.replace("/content/text");
+  }, [searchParams, router]);
 
   const handleGenerate = async () => {
     if (!topic.trim()) {
@@ -265,5 +280,13 @@ export default function TextContentPage() {
         onRestore={handleRestore}
       />
     </div>
+  );
+}
+
+export default function TextContentPage() {
+  return (
+    <Suspense>
+      <TextContent />
+    </Suspense>
   );
 }

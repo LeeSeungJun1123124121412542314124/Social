@@ -18,7 +18,7 @@ export class BulkGenerator {
   "ideas": [
     {
       "title": "게시물 제목",
-      "topic": "구체적인 주제/내용 방향",
+      "topic": "구체적인 주제/내용 방향(반드시 비어있지 않은 한 문장 이상. title이 충분히 구체적이면 title을 확장한 형태로)",
       "platform": "${input.platforms[0]}",
       "contentType": "text",
       "suggestedTone": "전문적이면서 친근한",
@@ -27,7 +27,8 @@ export class BulkGenerator {
   ]
 }
 
-contentType은 text, carousel, blog 중 하나. platform은 ${platformStr} 중 하나.`;
+contentType은 text, carousel, blog 중 하나. platform은 ${platformStr} 중 하나.
+⚠️ 중요: topic은 절대 빈 문자열이면 안 됩니다. contentType이 text든 carousel이든 동일하게 구체적인 내용 방향을 담으세요.`;
 
     const raw = await this.llm.generateText(prompt, {
       temperature: 0.8,

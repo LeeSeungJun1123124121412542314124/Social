@@ -1,7 +1,7 @@
 // src/app/content/carousel/page.tsx
 "use client";
 
-import { Suspense, useState, useEffect, useRef } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Wand2, ImageIcon } from "lucide-react";
 import { toast } from "sonner";
@@ -22,6 +22,7 @@ import { CarouselPreview } from "@/components/content/CarouselPreview";
 import { useRouter } from "next/navigation";
 import { useCarouselGenerator } from "@/hooks/useContent";
 import { useAISettings } from "@/hooks/useSettings";
+import { consumeHandoff } from "@/lib/contentHandoff";
 import type { CarouselSlide, GeneratedCarousel } from "@/types/content.types";
 import { useContentHistory, type HistoryPost } from "@/hooks/useContentHistory";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
@@ -50,18 +51,16 @@ function CarouselContent() {
   const [imageProvider, setImageProvider] = useState<"pollinations" | "dalle" | "flux">("pollinations");
   const router = useRouter();
 
-  // 대량기획 → 카드뉴스 랩 네비게이션 시 URL topic이 바뀌면 입력란도 동기화.
-  // 단, 사용자가 이미 수동 편집한 내용을 덮어쓰지 않도록 "빈 상태이거나 이전 URL 값과 동일한 경우"만 갱신.
-  const prevUrlTopicRef = useRef(initialTopic);
+  // 대량기획에서 핸드오프 키로 도착한 경우 topic을 항상 덮어씌운다.
+  // handoff 키가 없으면 사용자가 직접 입력한 상태를 유지.
   useEffect(() => {
-    const urlTopic = searchParams.get("topic") ?? "";
-    if (urlTopic && (topic === "" || topic === prevUrlTopicRef.current)) {
-      setTopic(urlTopic);
-    }
-    prevUrlTopicRef.current = urlTopic;
-    // searchParams 변경 시에만 실행. topic을 deps에 넣으면 수동 편집 시마다 ref가 갱신되어 의도가 무너짐.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+    const key = searchParams.get("handoff");
+    const payload = consumeHandoff(key);
+    if (!payload) return;
+    setTopic(payload.topic);
+    // URL을 깨끗하게 정리해 새로고침·뒤로가기 시 재적용 방지
+    router.replace("/content/carousel");
+  }, [searchParams, router]);
 
   // 설정에서 불러온 imageProvider를 기본값으로 설정
   useEffect(() => {

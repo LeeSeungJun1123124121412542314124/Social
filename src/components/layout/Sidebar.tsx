@@ -14,6 +14,7 @@ import {
   Repeat2,
   BookOpen,
   Video,
+  FileText,
   Sun,
   Moon,
   Sparkles,
@@ -29,6 +30,7 @@ const mainItems = [
 ];
 
 const contentItems = [
+  { label: "텍스트 게시물", href: "/content/text", icon: FileText },
   { label: "카드뉴스 랩", href: "/content/carousel", icon: Layers },
   { label: "숏폼 생성", href: "/content/short-form", icon: Video },
   { label: "AI 대량 기획", href: "/content/bulk", icon: Zap },

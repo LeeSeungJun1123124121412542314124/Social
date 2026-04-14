@@ -1,8 +1,8 @@
 // src/app/content/blog/page.tsx
 "use client";
 
-import { Suspense, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Wand2, Copy, Check, Lightbulb, BookOpen } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import { useBlogGenerator } from "@/hooks/useContent";
 import type { GeneratedBlog } from "@/types/content.types";
 import { useContentHistory, type HistoryPost } from "@/hooks/useContentHistory";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
+import { consumeHandoff } from "@/lib/contentHandoff";
 
 const TIPS = [
   "제목에 핵심 키워드를 포함하면 검색 노출이 높아집니다.",
@@ -25,6 +26,9 @@ const TIPS = [
 
 function BlogContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  // 레거시 URL ?topic= 호환을 위해 초기값은 유지.
+  // 신규 핸드오프는 아래 effect에서 덮어씌운다.
   const [topic, setTopic] = useState(searchParams.get("topic") ?? "");
   const [keywords, setKeywords] = useState("");
   const [targetLength, setTargetLength] = useState("800");
@@ -33,6 +37,15 @@ function BlogContent() {
   const [showTips, setShowTips] = useState(false);
 
   const { generate, loading } = useBlogGenerator();
+
+  // 대량기획에서 핸드오프 키로 도착한 경우 topic을 항상 덮어씌운다.
+  useEffect(() => {
+    const key = searchParams.get("handoff");
+    const payload = consumeHandoff(key);
+    if (!payload) return;
+    setTopic(payload.topic);
+    router.replace("/content/blog");
+  }, [searchParams, router]);
   const { history, historyLoading, autoSave } = useContentHistory("blog");
 
   const handleGenerate = async () => {
