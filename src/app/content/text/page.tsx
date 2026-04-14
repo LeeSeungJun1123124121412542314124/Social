@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState, useEffect } from "react";
-import { Wand2, Copy, Check, Lightbulb } from "lucide-react";
+import { Wand2, Copy, Check, Lightbulb, Repeat2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,7 +24,7 @@ import type { GeneratedText } from "@/types/content.types";
 import { useContentHistory, type HistoryPost } from "@/hooks/useContentHistory";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
 import { useSearchParams, useRouter } from "next/navigation";
-import { consumeHandoff } from "@/lib/contentHandoff";
+import { consumeHandoff, createRepurposeHandoff } from "@/lib/contentHandoff";
 
 const TIPS = [
   "첫 문장에 핵심을 담아 독자의 주의를 잡으세요.",
@@ -88,6 +88,21 @@ function TextContent() {
       toast.success("클립보드에 복사되었습니다.");
       setTimeout(() => setCopied(false), 2000);
     }
+  };
+
+  const handleSendToRepurpose = () => {
+    if (!result) return;
+    const key = createRepurposeHandoff({
+      sourceContent: result.text,
+      sourceType: "idea", // text → idea (리퍼포징 SOURCE_TYPES 매핑)
+      originType: "text",
+      title: topic.substring(0, 50),
+    });
+    if (!key) {
+      toast.error("리퍼포징 페이지로 전달 실패");
+      return;
+    }
+    router.push(`/content/repurpose?handoff=${key}`);
   };
 
   const handleRestore = (post: HistoryPost) => {
@@ -267,6 +282,10 @@ function TextContent() {
                       <Copy className="h-3.5 w-3.5 mr-1.5" />
                     )}
                     {copied ? "복사됨" : "복사"}
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={handleSendToRepurpose}>
+                    <Repeat2 className="h-3.5 w-3.5 mr-1.5" />
+                    리퍼포징
                   </Button>
                 </div>
               </CardContent>
