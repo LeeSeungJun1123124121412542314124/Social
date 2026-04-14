@@ -1,8 +1,9 @@
 // src/app/content/repurpose/page.tsx
 "use client";
 
-import { useState } from "react";
-import { RefreshCw, Copy, Check, Repeat2 } from "lucide-react";
+import { Suspense, useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { RefreshCw, Copy, Check, Repeat2, Database } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -22,6 +23,8 @@ import type { ContentType, RepurposeResult } from "@/types/content.types";
 import type { PlatformType } from "@/types/platform.types";
 import { useContentHistory, type HistoryPost } from "@/hooks/useContentHistory";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
+import { consumeRepurposeHandoff } from "@/lib/contentHandoff";
+import { HistorySearchDialog, type SearchableType } from "@/components/content/HistorySearchDialog";
 
 const SOURCE_TYPES = [
   { value: "blog", label: "블로그 아티클" },
@@ -39,16 +42,30 @@ const TARGET_FORMATS: { value: ContentType; label: string }[] = [
   { value: "thread", label: "쓰레드" },
 ];
 
-export default function RepurposePage() {
+function RepurposeContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [sourceType, setSourceType] = useState<SourceType>("blog");
   const [sourceContent, setSourceContent] = useState("");
   const [selectedFormats, setSelectedFormats] = useState<ContentType[]>(["text"]);
   const [selectedPlatforms, setSelectedPlatforms] = useState<PlatformType[]>(["instagram"]);
   const [results, setResults] = useState<RepurposeResult[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const { repurpose, loading } = useRepurposeGenerator();
   const { history, historyLoading, autoSave } = useContentHistory("repurpose");
+
+  // 텍스트/블로그/카드뉴스 페이지에서 핸드오프 키로 도착한 경우 sourceContent를 채운다
+  useEffect(() => {
+    const key = searchParams.get("handoff");
+    const payload = consumeRepurposeHandoff(key);
+    if (!payload) return;
+    setSourceContent(payload.sourceContent);
+    setSourceType(payload.sourceType);
+    toast.success("이전 결과를 불러왔습니다.");
+    router.replace("/content/repurpose");
+  }, [searchParams, router]);
 
   const toggleFormat = (f: ContentType) =>
     setSelectedFormats((prev) => prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]);
@@ -95,6 +112,33 @@ export default function RepurposePage() {
     }
   };
 
+  // 히스토리 검색 모달에서 항목 선택 시 sourceContent에 채우기
+  const handleSelectFromHistory = (post: HistoryPost, originType: SearchableType) => {
+    let content = post.contentText ?? "";
+
+    // carousel은 contentText(caption)만으로 맥락이 부족 → slides 본문을 합쳐준다
+    if (originType === "carousel" && post.contentData) {
+      try {
+        const parsed = JSON.parse(post.contentData) as {
+          slides?: { body?: string }[];
+        };
+        const slideBodies = (parsed.slides ?? [])
+          .map((s) => s.body ?? "")
+          .filter(Boolean)
+          .join("\n\n");
+        content = [content, slideBodies].filter(Boolean).join("\n\n");
+      } catch {
+        // 파싱 실패 시 contentText 그대로 사용
+      }
+    }
+
+    setSourceContent(content);
+    // text/carousel → idea, blog → blog (리퍼포징 SOURCE_TYPES 매핑)
+    setSourceType(originType === "blog" ? "blog" : "idea");
+    setSearchOpen(false);
+    toast.success("원본 콘텐츠를 불러왔습니다.");
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -105,6 +149,16 @@ export default function RepurposePage() {
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-6 items-start">
         {/* 좌측: 입력 폼 */}
         <div className="space-y-4 lg:sticky lg:top-6">
+          {/* DB 히스토리에서 원본 불러오기 */}
+          <Button
+            variant="outline"
+            onClick={() => setSearchOpen(true)}
+            className="w-full justify-start"
+          >
+            <Database className="h-4 w-4 mr-2" />
+            DB에서 불러오기
+          </Button>
+
           <div className="space-y-2">
             <Label>원본 유형</Label>
             <Select value={sourceType} onValueChange={(v) => v && setSourceType(v as typeof sourceType)}>
@@ -232,6 +286,20 @@ export default function RepurposePage() {
         loading={historyLoading}
         onRestore={handleRestore}
       />
+
+      <HistorySearchDialog
+        open={searchOpen}
+        onOpenChange={setSearchOpen}
+        onSelect={handleSelectFromHistory}
+      />
     </div>
+  );
+}
+
+export default function RepurposePage() {
+  return (
+    <Suspense>
+      <RepurposeContent />
+    </Suspense>
   );
 }
