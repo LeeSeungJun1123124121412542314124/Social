@@ -3,7 +3,7 @@
 
 import { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Wand2, Copy, Check, Lightbulb, BookOpen } from "lucide-react";
+import { Wand2, Copy, Check, Lightbulb, BookOpen, Repeat2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +16,7 @@ import { useBlogGenerator } from "@/hooks/useContent";
 import type { GeneratedBlog } from "@/types/content.types";
 import { useContentHistory, type HistoryPost } from "@/hooks/useContentHistory";
 import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
-import { consumeHandoff } from "@/lib/contentHandoff";
+import { consumeHandoff, createRepurposeHandoff } from "@/lib/contentHandoff";
 
 const TIPS = [
   "제목에 핵심 키워드를 포함하면 검색 노출이 높아집니다.",
@@ -74,6 +74,21 @@ function BlogContent() {
       toast.success("복사되었습니다.");
       setTimeout(() => setCopied(false), 2000);
     }
+  };
+
+  const handleSendToRepurpose = () => {
+    if (!result) return;
+    const key = createRepurposeHandoff({
+      sourceContent: result.body,
+      sourceType: "blog", // blog → blog (리퍼포징 SOURCE_TYPES 동일 이름)
+      originType: "blog",
+      title: result.title,
+    });
+    if (!key) {
+      toast.error("리퍼포징 페이지로 전달 실패");
+      return;
+    }
+    router.push(`/content/repurpose?handoff=${key}`);
   };
 
   const handleRestore = (post: HistoryPost) => {
@@ -214,6 +229,10 @@ function BlogContent() {
                       <Copy className="h-3.5 w-3.5 mr-1.5" />
                     )}
                     {copied ? "복사됨" : "복사"}
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={handleSendToRepurpose}>
+                    <Repeat2 className="h-3.5 w-3.5 mr-1.5" />
+                    리퍼포징
                   </Button>
                 </div>
               </CardContent>
