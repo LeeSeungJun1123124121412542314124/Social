@@ -132,10 +132,15 @@ export const contentService = {
     });
   },
 
-  // 타입별 최근 게시물 조회 (히스토리 패널용)
-  async getRecentByType(type: string, limit = 5) {
+  // 타입별 최근 게시물 조회 (히스토리 패널 + 검색 모달용)
+  // sinceDays 지정 시 createdAt >= now - sinceDays*24h 조건 추가
+  async getRecentByType(type: string, limit = 5, sinceDays?: number) {
+    const where: { type: string; createdAt?: { gte: Date } } = { type };
+    if (sinceDays && Number.isFinite(sinceDays) && sinceDays > 0) {
+      where.createdAt = { gte: new Date(Date.now() - sinceDays * 24 * 60 * 60 * 1000) };
+    }
     return prisma.post.findMany({
-      where: { type },
+      where,
       select: {
         id: true,
         title: true,
