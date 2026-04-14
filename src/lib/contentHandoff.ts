@@ -1,5 +1,5 @@
 // src/lib/contentHandoff.ts
-// 대량기획 → 개별 콘텐츠 페이지 간 1회용 핸드오프 유틸리티.
+// 콘텐츠 페이지 간 1회용 핸드오프 유틸리티.
 // URL에 고유 키, sessionStorage에 실제 페이로드를 저장해 Consume-and-Replace 패턴 구현.
 import type { PlatformType } from "@/types/platform.types";
 
@@ -41,6 +41,57 @@ export function consumeHandoff(key: string | null | undefined): ContentHandoff |
   window.sessionStorage.removeItem(storageKey);
   try {
     return JSON.parse(raw) as ContentHandoff;
+  } catch {
+    return null;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// 리퍼포징 핸드오프 — 생성 결과를 리퍼포징 페이지 sourceContent로 1회 전달
+// ─────────────────────────────────────────────────────────────
+
+export type RepurposeSourceType = "blog" | "video" | "idea" | "script";
+
+export type RepurposeHandoff = {
+  sourceContent: string;
+  sourceType: RepurposeSourceType;
+  /** 원본 콘텐츠 타입 (디버그·분석용, 선택) */
+  originType?: "text" | "blog" | "carousel" | "bulk";
+  title?: string;
+};
+
+const REPURPOSE_PREFIX = "repurpose-handoff:";
+
+/**
+ * 리퍼포징 핸드오프 페이로드를 sessionStorage에 저장하고 고유 키를 반환한다.
+ * 반환된 키를 URL 쿼리 파라미터 `handoff`로 전달한다.
+ * sessionStorage 쓰기 실패(privacy 모드 등) 시 빈 문자열 반환.
+ */
+export function createRepurposeHandoff(payload: RepurposeHandoff): string {
+  if (typeof window === "undefined") return "";
+  const key = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+  try {
+    window.sessionStorage.setItem(REPURPOSE_PREFIX + key, JSON.stringify(payload));
+  } catch {
+    return "";
+  }
+  return key;
+}
+
+/**
+ * 키에 해당하는 리퍼포징 핸드오프 페이로드를 1회 소비한다.
+ * 읽는 즉시 sessionStorage에서 삭제하므로 새로고침·뒤로가기로 재적용되지 않는다.
+ */
+export function consumeRepurposeHandoff(
+  key: string | null | undefined
+): RepurposeHandoff | null {
+  if (!key || typeof window === "undefined") return null;
+  const storageKey = REPURPOSE_PREFIX + key;
+  const raw = window.sessionStorage.getItem(storageKey);
+  if (!raw) return null;
+  window.sessionStorage.removeItem(storageKey);
+  try {
+    return JSON.parse(raw) as RepurposeHandoff;
   } catch {
     return null;
   }
