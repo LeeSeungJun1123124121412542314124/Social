@@ -72,6 +72,7 @@ export interface GenerateBlogInput {
   targetLength?: number;
   keywords?: string[];
   additionalContext?: string;
+  useWebReference?: boolean;
 }
 
 export interface RepurposeInput {
@@ -100,6 +101,13 @@ export interface GeneratedBlog {
   excerpt: string;
   tags: string[];
   wordCount: number;
+  reference?: {
+    title: string;
+    url: string;
+    source: string;
+    rank: 1 | 2 | 3;
+  };
+  referenceFallback?: boolean; // useWebReference=true인데 크롤링 실패 → fail-open 생성 표시
 }
 
 // BulkPlan 타입 (Task B2에서 사용)

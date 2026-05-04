@@ -29,10 +29,10 @@ import { ContentHistoryPanel } from "@/components/content/ContentHistoryPanel";
 
 // 스타일 옵션 — 렌더링마다 재생성 방지를 위해 컴포넌트 외부에 정의
 const STYLES = [
-  { value: "minimal", label: "미니멀" },
-  { value: "vivid", label: "생동감있는" },
-  { value: "professional", label: "전문적인" },
-  { value: "warm", label: "따뜻한" },
+  { value: "미니멀", label: "미니멀" },
+  { value: "생동감있는", label: "생동감있는" },
+  { value: "전문적인", label: "전문적인" },
+  { value: "따뜻한", label: "따뜻한" },
 ];
 
 function CarouselContent() {
@@ -40,7 +40,7 @@ function CarouselContent() {
   const initialTopic = searchParams.get("topic") ?? "";
   const [topic, setTopic] = useState(initialTopic);
   const [slideCount, setSlideCount] = useState("5");
-  const [style, setStyle] = useState("minimal");
+  const [style, setStyle] = useState("미니멀");
   const [generateImages, setGenerateImages] = useState(false);
   const [result, setResult] = useState<GeneratedCarousel | null>(null);
   const [activeTab, setActiveTab] = useState("generate");

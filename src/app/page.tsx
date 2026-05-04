@@ -3,7 +3,6 @@ import {
   Layers,
   CalendarDays,
   BarChart2,
-  MessageSquare,
   Zap,
   Repeat2,
   Video,
@@ -74,15 +73,6 @@ const quickLinks = [
     iconColor: "text-orange-600 dark:text-orange-400",
     iconBg: "bg-orange-50 dark:bg-orange-900/20",
     cardBg: "bg-orange-50/40 dark:bg-orange-900/10",
-  },
-  {
-    title: "댓글/DM 관리",
-    description: "AI 자동 응답으로 고객 소통을 자동화합니다.",
-    href: "/engage",
-    icon: MessageSquare,
-    iconColor: "text-teal-600 dark:text-teal-400",
-    iconBg: "bg-teal-50 dark:bg-teal-900/20",
-    cardBg: "bg-teal-50/40 dark:bg-teal-900/10",
   },
 ];
 

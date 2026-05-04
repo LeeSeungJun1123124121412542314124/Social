@@ -3,7 +3,7 @@
 
 import { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Wand2, Copy, Check, Lightbulb, BookOpen, Repeat2 } from "lucide-react";
+import { Wand2, Copy, Check, Lightbulb, BookOpen, Repeat2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +32,7 @@ function BlogContent() {
   const [topic, setTopic] = useState(searchParams.get("topic") ?? "");
   const [keywords, setKeywords] = useState("");
   const [targetLength, setTargetLength] = useState("800");
+  const [useWebReference, setUseWebReference] = useState(true);
   const [result, setResult] = useState<GeneratedBlog | null>(null);
   const [copied, setCopied] = useState(false);
   const [showTips, setShowTips] = useState(false);
@@ -50,21 +51,33 @@ function BlogContent() {
 
   const handleGenerate = async () => {
     if (!topic.trim()) { toast.error("주제를 입력해주세요."); return; }
-    const res = await generate({
+    const { data: res, errorCode } = await generate({
       topic,
       keywords: keywords ? keywords.split(",").map((k) => k.trim()) : undefined,
       targetLength: parseInt(targetLength),
+      useWebReference,
     });
     if (res) {
       setResult(res);
-      toast.success("블로그가 생성되었습니다.");
+      if (res.referenceFallback) {
+        toast.warning("참고자료 수집 실패 — 브랜드 톤만으로 생성했습니다.");
+      } else {
+        toast.success("블로그가 생성되었습니다.");
+      }
       void autoSave({
         title: res.title,
         contentText: res.body,
         contentData: JSON.stringify({ excerpt: res.excerpt, tags: res.tags, wordCount: res.wordCount }),
       });
+    } else {
+      if (errorCode === "BRAND_TONE_REQUIRED") {
+        toast.error("브랜드 톤을 먼저 설정하세요.", {
+          action: { label: "설정 페이지로", onClick: () => router.push("/settings") },
+        });
+      } else {
+        toast.error("생성에 실패했습니다.");
+      }
     }
-    else toast.error("생성에 실패했습니다.");
   };
 
   const handleCopy = () => {
@@ -151,6 +164,19 @@ function BlogContent() {
               </select>
             </div>
           </div>
+          {/* 웹 참고자료 사용 토글 */}
+          <label className="flex items-center gap-2 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={useWebReference}
+              onChange={(e) => setUseWebReference(e.target.checked)}
+              className="h-4 w-4 rounded border-border accent-primary"
+            />
+            <span className="text-sm text-muted-foreground">
+              웹 참고자료 사용 (네이버 검색 — 소재·구성 참고)
+            </span>
+          </label>
+
           <Button onClick={handleGenerate} disabled={loading || !topic.trim()} className="w-full">
             <Wand2 className="h-4 w-4 mr-2" />
             {loading ? "생성 중..." : "블로그 생성"}
@@ -200,6 +226,23 @@ function BlogContent() {
           {result && !loading && (
             <Card>
               <CardHeader className="pb-3">
+                {/* 참고자료 배지 */}
+                {result.reference && (
+                  <a
+                    href={result.reference.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <span>💡 참고: {result.reference.source} (네이버 {result.reference.rank}등)</span>
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                )}
+                {result.referenceFallback && (
+                  <span className="text-xs text-muted-foreground">
+                    ⚠️ 참고자료 수집 실패 — 브랜드 톤만으로 생성됨
+                  </span>
+                )}
                 <div className="flex items-start justify-between gap-2">
                   <CardTitle className="text-lg">{result.title}</CardTitle>
                   <div className="flex items-center gap-1.5 shrink-0">

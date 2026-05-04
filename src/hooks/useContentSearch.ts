@@ -40,13 +40,18 @@ export function useContentSearch(params: SearchParams | null) {
     }
   }, []);
 
+  // 객체 참조가 매 렌더마다 새로 생성되는 문제 방지: primitive 필드로 의존성 분해
+  const type = params?.type;
+  const since = params?.since;
+  const limit = params?.limit;
+
   useEffect(() => {
-    if (!params) {
+    if (type == null || since == null) {
       setResults([]);
       return;
     }
-    void search(params);
-  }, [params, search]);
+    void search({ type, since, limit });
+  }, [type, since, limit, search]);
 
   return { results, loading };
 }

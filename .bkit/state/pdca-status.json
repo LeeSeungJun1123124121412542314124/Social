@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-04-07T02:40:15.520Z",
+  "lastUpdated": "2026-04-14T05:02:27.945Z",
   "activeFeatures": [
     "social",
     "config",
@@ -38,7 +38,9 @@
     "sync",
     "report",
     "test",
-    "settings"
+    "settings",
+    "refactor-gap-recovery",
+    "health"
   ],
   "primaryFeature": "social",
   "features": {
@@ -51,9 +53,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:27:04.362Z",
-        "lastUpdated": "2026-04-07T02:38:08.953Z"
+        "lastUpdated": "2026-04-14T05:02:13.487Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\services\\settings.service.ts"
+      "lastFile": "d:\\Dev\\social\\src\\app\\page.tsx"
     },
     "config": {
       "phase": "do",
@@ -64,9 +66,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:28:32.723Z",
-        "lastUpdated": "2026-04-07T02:37:33.978Z"
+        "lastUpdated": "2026-04-13T01:15:32.851Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\config\\ai.config.ts"
+      "lastFile": "d:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\config\\app.config.ts"
     },
     "layout": {
       "phase": "do",
@@ -77,7 +79,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:42:44.886Z",
-        "lastUpdated": "2026-04-07T02:15:10.464Z"
+        "lastUpdated": "2026-04-14T05:01:58.334Z"
       },
       "lastFile": "d:\\Dev\\social\\src\\components\\layout\\Sidebar.tsx"
     },
@@ -90,9 +92,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:48:13.953Z",
-        "lastUpdated": "2026-04-06T04:58:25.502Z"
+        "lastUpdated": "2026-04-13T01:25:15.557Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\adapters\\youtube.adapter.ts"
+      "lastFile": "d:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\adapters\\youtube.adapter.ts"
     },
     "accounts": {
       "phase": "do",
@@ -103,9 +105,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:51:08.530Z",
-        "lastUpdated": "2026-04-06T08:09:38.620Z"
+        "lastUpdated": "2026-04-13T02:27:25.697Z"
       },
-      "lastFile": "D:\\Dev\\social\\src\\components\\accounts\\AccountCard.tsx"
+      "lastFile": "D:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\app\\accounts\\page.tsx"
     },
     "[id]": {
       "phase": "do",
@@ -116,9 +118,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:51:13.499Z",
-        "lastUpdated": "2026-04-06T06:38:58.898Z"
+        "lastUpdated": "2026-04-13T02:04:48.189Z"
       },
-      "lastFile": "D:\\Dev\\social\\src\\app\\api\\engage\\rules\\[id]\\route.ts"
+      "lastFile": "d:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\app\\api\\engage\\rules\\[id]\\route.ts"
     },
     "auth": {
       "phase": "do",
@@ -155,9 +157,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:52:33.976Z",
-        "lastUpdated": "2026-04-07T02:37:46.694Z"
+        "lastUpdated": "2026-04-13T01:55:01.856Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\ai\\index.ts"
+      "lastFile": "d:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\app\\api\\settings\\ai\\route.ts"
     },
     "providers": {
       "phase": "do",
@@ -168,7 +170,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:52:45.120Z",
-        "lastUpdated": "2026-04-07T02:11:25.390Z"
+        "lastUpdated": "2026-04-07T03:19:37.254Z"
       },
       "lastFile": "d:\\Dev\\social\\src\\ai\\providers\\anthropic.provider.ts"
     },
@@ -181,9 +183,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:53:11.801Z",
-        "lastUpdated": "2026-04-06T04:33:28.672Z"
+        "lastUpdated": "2026-04-14T03:53:45.783Z"
       },
-      "lastFile": "D:\\Dev\\social\\src\\ai\\generators\\bulk.generator.ts"
+      "lastFile": "d:\\Dev\\social\\src\\ai\\generators\\blog.generator.ts"
     },
     "image": {
       "phase": "do",
@@ -194,9 +196,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:53:16.725Z",
-        "lastUpdated": "2026-04-07T02:37:16.437Z"
+        "lastUpdated": "2026-04-13T01:24:23.604Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\ai\\image\\pollinations.provider.ts"
+      "lastFile": "d:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\ai\\image\\flux.provider.ts"
     },
     "tts": {
       "phase": "do",
@@ -220,9 +222,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:54:18.630Z",
-        "lastUpdated": "2026-04-06T03:30:57.989Z"
+        "lastUpdated": "2026-04-14T02:27:28.195Z"
       },
-      "lastFile": "D:\\Dev\\social\\src\\components\\content\\CarouselPreview.tsx"
+      "lastFile": "d:\\Dev\\social\\src\\components\\content\\HistorySearchDialog.tsx"
     },
     "text": {
       "phase": "do",
@@ -233,9 +235,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:54:31.014Z",
-        "lastUpdated": "2026-04-07T02:12:46.337Z"
+        "lastUpdated": "2026-04-14T04:41:02.819Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\app\\api\\content\\generate\\text\\route.ts"
+      "lastFile": "d:\\Dev\\social\\src\\app\\content\\text\\page.tsx"
     },
     "jobs": {
       "phase": "do",
@@ -246,9 +248,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:55:42.547Z",
-        "lastUpdated": "2026-04-06T07:18:06.516Z"
+        "lastUpdated": "2026-04-13T02:14:25.892Z"
       },
-      "lastFile": "D:\\Dev\\social\\src\\scheduler\\jobs\\analytics-sync.job.ts"
+      "lastFile": "d:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\scheduler\\jobs\\engage-poll.job.ts"
     },
     "scheduler": {
       "phase": "do",
@@ -259,7 +261,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:56:12.571Z",
-        "lastUpdated": "2026-04-03T07:56:12.571Z"
+        "lastUpdated": "2026-04-14T05:02:27.944Z"
       },
       "lastFile": "d:\\Dev\\social\\src\\scheduler\\index.ts"
     },
@@ -272,9 +274,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:56:41.213Z",
-        "lastUpdated": "2026-04-03T07:56:41.213Z"
+        "lastUpdated": "2026-04-13T01:54:48.451Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\app\\api\\publish\\route.ts"
+      "lastFile": "d:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\app\\api\\publish\\route.ts"
     },
     "schedule": {
       "phase": "do",
@@ -285,9 +287,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:56:50.415Z",
-        "lastUpdated": "2026-04-03T07:56:50.415Z"
+        "lastUpdated": "2026-04-13T02:04:24.276Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\app\\api\\publish\\schedule\\route.ts"
+      "lastFile": "d:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\app\\api\\publish\\schedule\\route.ts"
     },
     "calendar": {
       "phase": "do",
@@ -298,9 +300,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:57:29.390Z",
-        "lastUpdated": "2026-04-06T08:30:15.443Z"
+        "lastUpdated": "2026-04-13T02:28:13.000Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\app\\calendar\\page.tsx"
+      "lastFile": "D:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\app\\calendar\\page.tsx"
     },
     "carousel": {
       "phase": "do",
@@ -311,7 +313,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:57:55.819Z",
-        "lastUpdated": "2026-04-07T02:15:57.006Z"
+        "lastUpdated": "2026-04-14T04:42:09.032Z"
       },
       "lastFile": "d:\\Dev\\social\\src\\app\\content\\carousel\\page.tsx"
     },
@@ -337,9 +339,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:58:05.982Z",
-        "lastUpdated": "2026-04-07T02:12:53.513Z"
+        "lastUpdated": "2026-04-14T04:33:02.083Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\app\\api\\content\\generate\\blog\\route.ts"
+      "lastFile": "d:\\Dev\\social\\src\\app\\content\\blog\\page.tsx"
     },
     "bulk": {
       "phase": "do",
@@ -350,9 +352,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:58:10.689Z",
-        "lastUpdated": "2026-04-07T02:12:58.092Z"
+        "lastUpdated": "2026-04-13T08:22:01.242Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\app\\api\\content\\generate\\bulk\\route.ts"
+      "lastFile": "d:\\Dev\\social\\src\\app\\content\\bulk\\page.tsx"
     },
     "repurpose": {
       "phase": "do",
@@ -363,9 +365,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:58:16.441Z",
-        "lastUpdated": "2026-04-07T02:13:04.204Z"
+        "lastUpdated": "2026-04-14T02:32:22.943Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\app\\api\\content\\generate\\repurpose\\route.ts"
+      "lastFile": "d:\\Dev\\social\\src\\app\\content\\repurpose\\page.tsx"
     },
     "analytics": {
       "phase": "do",
@@ -376,9 +378,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:58:21.944Z",
-        "lastUpdated": "2026-04-06T08:09:32.248Z"
+        "lastUpdated": "2026-04-13T02:27:50.109Z"
       },
-      "lastFile": "D:\\Dev\\social\\src\\app\\analytics\\page.tsx"
+      "lastFile": "D:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\app\\analytics\\page.tsx"
     },
     "engage": {
       "phase": "do",
@@ -389,9 +391,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T07:58:27.171Z",
-        "lastUpdated": "2026-04-06T08:10:00.340Z"
+        "lastUpdated": "2026-04-13T02:28:37.321Z"
       },
-      "lastFile": "D:\\Dev\\social\\src\\app\\engage\\page.tsx"
+      "lastFile": "D:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\app\\engage\\page.tsx"
     },
     "notifications": {
       "phase": "do",
@@ -415,9 +417,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-03T08:03:15.515Z",
-        "lastUpdated": "2026-04-06T04:57:50.041Z"
+        "lastUpdated": "2026-04-13T01:35:06.116Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\app\\api\\accounts\\callback\\[platform]\\route.ts"
+      "lastFile": "d:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\app\\api\\accounts\\callback\\[platform]\\route.ts"
     },
     "ui": {
       "phase": "do",
@@ -428,9 +430,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-06T03:30:25.551Z",
-        "lastUpdated": "2026-04-06T08:08:32.630Z"
+        "lastUpdated": "2026-04-13T02:27:15.401Z"
       },
-      "lastFile": "D:\\Dev\\social\\src\\components\\ui\\empty-state.tsx"
+      "lastFile": "D:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\components\\ui\\skeleton.tsx"
     },
     "send": {
       "phase": "do",
@@ -467,9 +469,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-06T06:33:50.754Z",
-        "lastUpdated": "2026-04-06T06:34:23.059Z"
+        "lastUpdated": "2026-04-13T02:04:43.226Z"
       },
-      "lastFile": "D:\\Dev\\social\\src\\app\\api\\engage\\rules\\route.ts"
+      "lastFile": "d:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\app\\api\\engage\\rules\\route.ts"
     },
     "sync": {
       "phase": "do",
@@ -506,9 +508,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-07T02:13:37.865Z",
-        "lastUpdated": "2026-04-07T02:13:37.865Z"
+        "lastUpdated": "2026-04-13T01:55:06.529Z"
       },
-      "lastFile": "d:\\Dev\\social\\src\\app\\api\\settings\\ai\\test\\route.ts"
+      "lastFile": "d:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\app\\api\\settings\\ai\\test\\route.ts"
     },
     "settings": {
       "phase": "do",
@@ -519,9 +521,35 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-07T02:14:37.701Z",
-        "lastUpdated": "2026-04-07T02:40:15.520Z"
+        "lastUpdated": "2026-04-14T03:55:48.310Z"
       },
       "lastFile": "d:\\Dev\\social\\src\\app\\settings\\page.tsx"
+    },
+    "refactor-gap-recovery": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-04-13T01:15:27.986Z",
+        "lastUpdated": "2026-04-13T04:36:47.289Z"
+      },
+      "lastFile": "d:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\services\\content.service.ts"
+    },
+    "health": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-04-13T02:36:34.766Z",
+        "lastUpdated": "2026-04-13T02:40:51.721Z"
+      },
+      "lastFile": "d:\\Dev\\social\\.worktrees\\refactor-gap-recovery\\src\\app\\admin\\health\\page.tsx"
     }
   },
   "pipeline": {
@@ -532,7 +560,7 @@
   "session": {
     "startedAt": "2026-04-03T06:02:29.818Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-04-07T02:40:15.520Z"
+    "lastActivity": "2026-04-14T05:02:27.945Z"
   },
   "history": [
     {
@@ -2356,6 +2384,1752 @@
     {
       "timestamp": "2026-04-07T02:40:15.520Z",
       "feature": "settings",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:02:08.500Z",
+      "feature": "test",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:02:26.054Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:02:34.417Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:02:41.932Z",
+      "feature": "settings",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:14:56.713Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:15:03.275Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:15:10.331Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:19:32.030Z",
+      "feature": "providers",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:19:37.254Z",
+      "feature": "providers",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:19:43.732Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:19:52.188Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:20:00.769Z",
+      "feature": "ai",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:20:11.969Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:20:21.112Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:20:25.975Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:20:37.774Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:20:48.174Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:20:59.491Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:21:04.438Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:21:08.791Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:25:59.926Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:26:49.181Z",
+      "feature": "ai",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:27:42.472Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:33:16.857Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:33:52.968Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:34:43.251Z",
+      "feature": "image",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:37:56.394Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:46:35.493Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:46:43.539Z",
+      "feature": "image",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:46:48.108Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:48:36.509Z",
+      "feature": "image",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:50:24.625Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:54:11.545Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:54:30.165Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:56:43.881Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-07T03:56:49.776Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:05:21.487Z",
+      "feature": "config",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:05:26.938Z",
+      "feature": "analytics",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:05:31.072Z",
+      "feature": "analytics",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:05:40.390Z",
+      "feature": "analytics",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:05:45.691Z",
+      "feature": "engage",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:05:51.203Z",
+      "feature": "engage",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:06:01.240Z",
+      "feature": "engage",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:06:05.255Z",
+      "feature": "engage",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:06:09.099Z",
+      "feature": "engage",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:06:17.671Z",
+      "feature": "accounts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:06:24.253Z",
+      "feature": "accounts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:06:29.899Z",
+      "feature": "settings",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:15:27.986Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:15:32.851Z",
+      "feature": "config",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:15:39.313Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:15:45.259Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:15:52.273Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:16:37.257Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:24:14.179Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:24:19.740Z",
+      "feature": "image",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:24:23.604Z",
+      "feature": "image",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:24:28.224Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:24:32.337Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:24:37.850Z",
+      "feature": "adapters",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:24:41.411Z",
+      "feature": "adapters",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:24:45.559Z",
+      "feature": "adapters",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:24:49.194Z",
+      "feature": "adapters",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:24:53.709Z",
+      "feature": "adapters",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:24:57.295Z",
+      "feature": "adapters",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:25:01.461Z",
+      "feature": "adapters",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:25:07.255Z",
+      "feature": "adapters",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:25:11.673Z",
+      "feature": "adapters",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:25:15.557Z",
+      "feature": "adapters",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:25:21.274Z",
+      "feature": "[platform]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:25:25.264Z",
+      "feature": "[platform]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:32:48.749Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:33:42.186Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:33:50.307Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:34:01.353Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:35:06.116Z",
+      "feature": "[platform]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:35:09.833Z",
+      "feature": "scheduler",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:35:14.231Z",
+      "feature": "jobs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:35:18.125Z",
+      "feature": "jobs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:35:25.304Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:35:29.948Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:35:34.474Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:35:38.317Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:35:42.257Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:35:46.241Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:35:50.006Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:35:53.942Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:35:57.992Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:36:02.221Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:36:06.805Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:37:26.750Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:40:42.596Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:49:24.020Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:49:34.008Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:49:43.423Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:50:32.430Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:54:08.808Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:54:15.463Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:54:21.041Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:54:30.335Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:54:36.083Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:54:42.846Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:54:48.451Z",
+      "feature": "publish",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:54:53.875Z",
+      "feature": "schedule",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:55:01.856Z",
+      "feature": "ai",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:55:06.529Z",
+      "feature": "test",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:55:14.910Z",
+      "feature": "rules",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:55:26.356Z",
+      "feature": "[id]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:55:34.403Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:55:43.618Z",
+      "feature": "[id]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T01:55:51.401Z",
+      "feature": "analytics",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:04:19.527Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:04:24.276Z",
+      "feature": "schedule",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:04:28.490Z",
+      "feature": "[id]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:04:36.434Z",
+      "feature": "analytics",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:04:43.226Z",
+      "feature": "rules",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:04:48.189Z",
+      "feature": "[id]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:14:00.571Z",
+      "feature": "scheduler",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:14:06.799Z",
+      "feature": "jobs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:14:10.845Z",
+      "feature": "jobs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:14:19.542Z",
+      "feature": "jobs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:14:25.893Z",
+      "feature": "jobs",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:14:37.115Z",
+      "feature": "scheduler",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:18:02.616Z",
+      "feature": "scheduler",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:18:06.969Z",
+      "feature": "scheduler",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:19:41.852Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:19:48.030Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:19:55.762Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:20:00.113Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:20:06.205Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:20:11.936Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:20:17.070Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:20:46.798Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:21:17.847Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:21:37.064Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:22:02.598Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:25:39.318Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:27:06.965Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:27:15.401Z",
+      "feature": "ui",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:27:20.082Z",
+      "feature": "accounts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:27:25.697Z",
+      "feature": "accounts",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:27:30.377Z",
+      "feature": "analytics",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:27:38.557Z",
+      "feature": "analytics",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:27:45.438Z",
+      "feature": "analytics",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:27:50.109Z",
+      "feature": "analytics",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:27:54.367Z",
+      "feature": "calendar",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:28:00.678Z",
+      "feature": "calendar",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:28:05.611Z",
+      "feature": "calendar",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:28:13.000Z",
+      "feature": "calendar",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:28:18.090Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:28:22.694Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:28:26.840Z",
+      "feature": "engage",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:28:37.321Z",
+      "feature": "engage",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:28:41.653Z",
+      "feature": "settings",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:28:46.130Z",
+      "feature": "settings",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:30:47.386Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:36:29.844Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:36:34.766Z",
+      "feature": "health",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:37:05.445Z",
+      "feature": "health",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:40:42.642Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:40:47.446Z",
+      "feature": "health",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:40:51.721Z",
+      "feature": "health",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:59:36.799Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T02:59:43.669Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:02:27.271Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:03:52.969Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:04:48.420Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:06:13.542Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:07:29.900Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:08:16.925Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:08:21.386Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:08:25.850Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:08:31.231Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:08:38.955Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:08:44.957Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:08:48.781Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:10:06.031Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:10:10.820Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:10:14.684Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:10:20.054Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:10:28.722Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:10:35.412Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:10:39.744Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:11:59.495Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:12:03.805Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:12:08.965Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:12:17.816Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:12:21.586Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:12:25.569Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:12:30.425Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:13:31.581Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:13:35.673Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:13:41.219Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:13:46.641Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:13:50.444Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:14:39.358Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:14:44.850Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:14:50.203Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:14:55.545Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:15:03.834Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:15:10.948Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:15:15.603Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:21:05.335Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:21:10.517Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T03:21:14.208Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T04:36:47.289Z",
+      "feature": "refactor-gap-recovery",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T04:37:10.037Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T04:37:15.226Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T04:37:19.474Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T04:37:23.930Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T05:11:53.416Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T05:23:16.085Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T05:46:51.300Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T06:13:25.632Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T06:13:29.887Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T06:13:45.388Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T07:46:43.314Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T07:46:54.216Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T07:47:06.952Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T07:47:17.947Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T07:47:22.627Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T07:47:33.861Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T07:48:15.341Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T07:48:31.440Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T07:48:35.746Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T07:48:44.216Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T07:48:58.714Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T07:49:04.612Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T07:49:18.383Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T08:21:20.025Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T08:21:32.605Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T08:21:37.958Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T08:21:51.057Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T08:22:01.242Z",
+      "feature": "bulk",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T08:38:11.971Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T08:38:18.846Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:23:42.066Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:23:56.481Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:24:43.066Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:24:54.663Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:25:46.317Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:27:28.195Z",
+      "feature": "content",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:28:19.446Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:28:24.032Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:28:31.852Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:28:39.417Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:29:27.939Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:29:32.065Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:29:38.795Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:29:44.723Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:31:44.043Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:31:48.992Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:31:58.914Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:32:10.255Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:32:17.206Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T02:32:22.943Z",
+      "feature": "repurpose",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:20:00.642Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:50:56.174Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:51:01.796Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:51:09.439Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:51:16.711Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:51:29.986Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:52:11.054Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:52:41.349Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:52:47.276Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:52:55.141Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:53:27.004Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:53:45.783Z",
+      "feature": "generators",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:53:57.091Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:54:19.298Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:54:25.779Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:54:36.038Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:54:42.668Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:54:50.620Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:55:11.203Z",
+      "feature": "settings",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:55:19.983Z",
+      "feature": "settings",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:55:28.731Z",
+      "feature": "settings",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T03:55:48.310Z",
+      "feature": "settings",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T04:32:43.001Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T04:33:02.083Z",
+      "feature": "blog",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T04:40:51.013Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T04:41:02.819Z",
+      "feature": "text",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T04:41:53.393Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T04:42:09.032Z",
+      "feature": "carousel",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T05:01:49.528Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T05:01:53.717Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T05:01:58.334Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T05:02:07.848Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T05:02:13.487Z",
+      "feature": "social",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T05:02:21.449Z",
+      "feature": "scheduler",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-14T05:02:27.944Z",
+      "feature": "scheduler",
       "phase": "do",
       "action": "updated"
     }

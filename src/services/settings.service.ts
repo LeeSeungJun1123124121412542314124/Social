@@ -8,6 +8,8 @@ export interface AISettingsDTO {
   openaiKeyConfigured: boolean;
   anthropicKeyConfigured: boolean;
   falKeyConfigured: boolean;
+  naverKeyConfigured: boolean;
+  brandTonePrompt: string | null;
 }
 
 export interface UpdateAISettingsInput {
@@ -16,6 +18,9 @@ export interface UpdateAISettingsInput {
   openaiApiKey?: string;      // 빈 문자열 = 삭제, undefined = 변경없음
   anthropicApiKey?: string;
   falApiKey?: string;
+  naverClientId?: string;
+  naverClientSecret?: string;
+  brandTonePrompt?: string | null;
 }
 
 export interface TestConnectionResult {
@@ -36,6 +41,8 @@ export const settingsService = {
     const openaiKey = await getDecryptedKey("openai");
     const anthropicKey = await getDecryptedKey("anthropic");
     const falKey = await getDecryptedKey("fal");
+    const naverId = await getDecryptedKey("naver_client_id");
+    const naverSecret = await getDecryptedKey("naver_client_secret");
 
     return {
       llmProvider: settings.llmProvider as "openai" | "anthropic",
@@ -43,6 +50,8 @@ export const settingsService = {
       openaiKeyConfigured: !!openaiKey,
       anthropicKeyConfigured: !!anthropicKey,
       falKeyConfigured: !!falKey,
+      naverKeyConfigured: !!(naverId && naverSecret),
+      brandTonePrompt: settings.brandTonePrompt ?? null,
     };
   },
 
@@ -67,6 +76,19 @@ export const settingsService = {
       data.encryptedFalKey = input.falApiKey.trim()
         ? encrypt(input.falApiKey.trim())
         : null;
+    }
+    if (input.naverClientId !== undefined) {
+      data.encryptedNaverClientId = input.naverClientId.trim()
+        ? encrypt(input.naverClientId.trim())
+        : null;
+    }
+    if (input.naverClientSecret !== undefined) {
+      data.encryptedNaverClientSecret = input.naverClientSecret.trim()
+        ? encrypt(input.naverClientSecret.trim())
+        : null;
+    }
+    if (input.brandTonePrompt !== undefined) {
+      data.brandTonePrompt = input.brandTonePrompt?.trim() || null;
     }
 
     await prisma.appSetting.upsert({
@@ -135,7 +157,9 @@ export const settingsService = {
 };
 
 // 내부 헬퍼: DB 우선, env 폴백
-export async function getDecryptedKey(keyType: "openai" | "anthropic" | "fal"): Promise<string | null> {
+export async function getDecryptedKey(
+  keyType: "openai" | "anthropic" | "fal" | "naver_client_id" | "naver_client_secret"
+): Promise<string | null> {
   try {
     const settings = await prisma.appSetting.findUnique({
       where: { id: "singleton" },
@@ -145,6 +169,8 @@ export async function getDecryptedKey(keyType: "openai" | "anthropic" | "fal"): 
       openai: settings?.encryptedOpenaiKey,
       anthropic: settings?.encryptedAnthropicKey,
       fal: settings?.encryptedFalKey,
+      naver_client_id: settings?.encryptedNaverClientId,
+      naver_client_secret: settings?.encryptedNaverClientSecret,
     }[keyType];
 
     if (encryptedField) {
@@ -159,6 +185,8 @@ export async function getDecryptedKey(keyType: "openai" | "anthropic" | "fal"): 
     openai: process.env.OPENAI_API_KEY,
     anthropic: process.env.ANTHROPIC_API_KEY,
     fal: process.env.FAL_KEY,
+    naver_client_id: process.env.NAVER_CLIENT_ID,
+    naver_client_secret: process.env.NAVER_CLIENT_SECRET,
   }[keyType];
 
   return envValue && envValue.trim() !== "" && envValue !== '""' ? envValue : null;

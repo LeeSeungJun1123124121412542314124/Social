@@ -9,7 +9,6 @@ import {
   Layers,
   CalendarDays,
   BarChart2,
-  MessageSquare,
   Zap,
   Repeat2,
   BookOpen,
@@ -36,10 +35,6 @@ const contentItems = [
   { label: "AI 대량 기획", href: "/content/bulk", icon: Zap },
   { label: "리퍼포징", href: "/content/repurpose", icon: Repeat2 },
   { label: "블로그", href: "/content/blog", icon: BookOpen },
-];
-
-const manageItems = [
-  { label: "댓글/DM", href: "/engage", icon: MessageSquare },
 ];
 
 const systemItems = [
@@ -71,11 +66,6 @@ export function Sidebar() {
 
         <NavGroupLabel>콘텐츠</NavGroupLabel>
         {contentItems.map((item) => (
-          <SidebarItem key={item.href} {...item} active={isActive(item.href)} />
-        ))}
-
-        <NavGroupLabel>관리</NavGroupLabel>
-        {manageItems.map((item) => (
           <SidebarItem key={item.href} {...item} active={isActive(item.href)} />
         ))}
 

@@ -233,6 +233,21 @@ model AccountAnalyticsSnapshot {
   @@index([platform, snapshotDate])
 }
 
+// 스케줄러 작업 실행 기록
+model JobRun {
+  id             String    @id
+  jobName        String
+  startedAt      DateTime  @default(now())
+  finishedAt     DateTime?
+  status         String    @default("running")
+  itemsProcessed Int?
+  error          String?
+
+  @@index([jobName])
+  @@index([startedAt])
+  @@index([status])
+}
+
 // 앱 전역 설정 (1인용 - 단일 레코드)
 model AppSetting {
   id                    String   @id @default("singleton")
@@ -241,8 +256,11 @@ model AppSetting {
   encryptedOpenaiKey    String?
   encryptedAnthropicKey String?
   encryptedFalKey       String?
-  defaultTone           String   @default("professional_friendly")
-  timezone              String   @default("Asia/Seoul")
-  autoReplyEnabled      Boolean  @default(true)
-  updatedAt             DateTime @updatedAt
+  defaultTone                String   @default("professional_friendly")
+  timezone                   String   @default("Asia/Seoul")
+  autoReplyEnabled           Boolean  @default(true)
+  encryptedNaverClientId     String?
+  encryptedNaverClientSecret String?
+  brandTonePrompt            String?
+  updatedAt                  DateTime @updatedAt
 }

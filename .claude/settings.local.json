@@ -88,7 +88,12 @@
       "Bash(git -C \"D:/Dev/social\" show e73abbb:src/app/calendar/page.tsx)",
       "Bash(git -C \"D:/Dev/social\" show e73abbb:src/components/accounts/AccountCard.tsx)",
       "Bash(git -C \"D:/Dev/social\" show e73abbb:src/app/content/blog/page.tsx)",
-      "Bash(git -C \"D:/Dev/social\" show e73abbb:src/components/layout/TopBar.tsx)"
+      "Bash(git -C \"D:/Dev/social\" show e73abbb:src/components/layout/TopBar.tsx)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)"
     ]
+  },
+  "enabledPlugins": {
+    "ouroboros@ouroboros": true
   }
 }

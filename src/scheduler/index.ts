@@ -2,7 +2,7 @@ import cron from "node-cron";
 import { publishJob } from "./jobs/publish.job";
 import { tokenRefreshJob } from "./jobs/token-refresh.job";
 import { analyticsSyncJob } from "./jobs/analytics-sync.job";
-import { engagePollJob } from "./jobs/engage-poll.job";
+// import { engagePollJob } from "./jobs/engage-poll.job"; // 댓글/DM 기능 숨김 처리로 비활성화 (2026-04-14)
 import { schedulerConfig } from "@/config/scheduler.config";
 import { logger } from "@/lib/logger";
 
@@ -29,10 +29,10 @@ export function initScheduler(): void {
     await runJob("analytics-sync", analyticsSyncJob);
   });
 
-  // 댓글/DM 폴링 - 5분마다
-  cron.schedule(schedulerConfig.engagePoll, async () => {
-    await runJob("engage-poll", engagePollJob);
-  });
+  // 댓글/DM 폴링 - 비활성화 (2026-04-14)
+  // cron.schedule(schedulerConfig.engagePoll, async () => {
+  //   await runJob("engage-poll", engagePollJob);
+  // });
 
   isInitialized = true;
   logger.info("스케줄러 초기화 완료");

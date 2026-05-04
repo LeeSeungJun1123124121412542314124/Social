@@ -37,7 +37,7 @@ function TextContent() {
   const router = useRouter();
   const [topic, setTopic] = useState("");
   const [platform, setPlatform] = useState<PlatformType>("instagram");
-  const [tone, setTone] = useState("professional_friendly");
+  const [tone, setTone] = useState("전문적이면서 친근한");
   const [result, setResult] = useState<GeneratedText | null>(null);
   const [copied, setCopied] = useState(false);
   const [showTips, setShowTips] = useState(false);
@@ -177,11 +177,11 @@ function TextContent() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="professional_friendly">전문적이면서 친근한</SelectItem>
-                <SelectItem value="formal">격식체</SelectItem>
-                <SelectItem value="casual">캐주얼</SelectItem>
-                <SelectItem value="warm">따뜻하고 공감하는</SelectItem>
-                <SelectItem value="informative">정보 전달 위주</SelectItem>
+                <SelectItem value="전문적이면서 친근한">전문적이면서 친근한</SelectItem>
+                <SelectItem value="격식체">격식체</SelectItem>
+                <SelectItem value="캐주얼">캐주얼</SelectItem>
+                <SelectItem value="따뜻하고 공감하는">따뜻하고 공감하는</SelectItem>
+                <SelectItem value="정보 전달 위주">정보 전달 위주</SelectItem>
               </SelectContent>
             </Select>
           </div>

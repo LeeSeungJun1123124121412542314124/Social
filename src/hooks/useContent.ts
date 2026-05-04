@@ -113,7 +113,7 @@ export function useBlogGenerator() {
   const [error, setError] = useState<string | null>(null);
 
   const generate = useCallback(
-    async (input: GenerateBlogInput): Promise<GeneratedBlog | null> => {
+    async (input: GenerateBlogInput): Promise<{ data: GeneratedBlog | null; errorCode: string | null }> => {
       setLoading(true);
       setError(null);
       try {
@@ -125,13 +125,17 @@ export function useBlogGenerator() {
         const data = await res.json() as {
           success: boolean;
           data: GeneratedBlog;
-          error?: { message: string };
+          error?: { message: string; code?: string };
         };
-        if (!data.success) throw new Error(data.error?.message ?? "생성 실패");
-        return data.data;
+        if (!data.success) {
+          const errorCode = data.error?.code ?? null;
+          setError(data.error?.message ?? "생성 실패");
+          return { data: null, errorCode };
+        }
+        return { data: data.data, errorCode: null };
       } catch (err) {
         setError(err instanceof Error ? err.message : "알 수 없는 오류");
-        return null;
+        return { data: null, errorCode: null };
       } finally {
         setLoading(false);
       }

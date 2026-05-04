@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -75,13 +76,17 @@ export default function SettingsPage() {
   const [openaiKey, setOpenaiKey] = useState("");
   const [anthropicKey, setAnthropicKey] = useState("");
   const [falKey, setFalKey] = useState("");
+  const [naverClientId, setNaverClientId] = useState("");
+  const [naverClientSecret, setNaverClientSecret] = useState("");
+  const [brandTonePrompt, setBrandTonePrompt] = useState("");
 
-  // settings 최초 로드 시 provider 초기화 (이후 사용자 선택 유지)
+  // settings 최초 로드 시 provider + 브랜드 톤 초기화
   useEffect(() => {
     if (!settings) return;
     setLlmProvider(settings.llmProvider);
     setImageProvider(settings.imageProvider as "flux" | "dalle" | "pollinations");
-  }, [settings?.llmProvider, settings?.imageProvider]);
+    if (settings.brandTonePrompt) setBrandTonePrompt(settings.brandTonePrompt);
+  }, [settings?.llmProvider, settings?.imageProvider, settings?.brandTonePrompt]);
 
   const handleSave = async () => {
     const input: UpdateAISettingsInput = {
@@ -92,6 +97,10 @@ export default function SettingsPage() {
     if (openaiKey !== "") input.openaiApiKey = openaiKey;
     if (anthropicKey !== "") input.anthropicApiKey = anthropicKey;
     if (falKey !== "") input.falApiKey = falKey;
+    if (naverClientId !== "") input.naverClientId = naverClientId;
+    if (naverClientSecret !== "") input.naverClientSecret = naverClientSecret;
+    // brandTonePrompt는 항상 포함 (빈 문자열이면 null로 저장)
+    input.brandTonePrompt = brandTonePrompt.trim() || null;
 
     const ok = await save(input);
     if (ok) {
@@ -99,6 +108,8 @@ export default function SettingsPage() {
       setOpenaiKey("");
       setAnthropicKey("");
       setFalKey("");
+      setNaverClientId("");
+      setNaverClientSecret("");
     } else {
       toast.error("저장에 실패했습니다.");
     }
@@ -298,6 +309,83 @@ export default function SettingsPage() {
               </p>
             </div>
           )}
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* 네이버 검색 API */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2">
+          <h2 className="text-base font-semibold">네이버 검색 API</h2>
+          <KeyStatusBadge configured={settings?.naverKeyConfigured ?? false} />
+          <span className="text-xs text-muted-foreground ml-auto">블로그 웹 참고자료 기능에 사용</span>
+        </div>
+        <div className="space-y-3">
+          <div className="space-y-1.5">
+            <Label htmlFor="naver-client-id">
+              Client ID
+              {settings?.naverKeyConfigured && (
+                <span className="ml-2 text-xs text-muted-foreground">새 값 입력 시 덮어씁니다</span>
+              )}
+            </Label>
+            <KeyInput
+              id="naver-client-id"
+              placeholder={settings?.naverKeyConfigured ? "••••••••••••••••••••••••" : "Client ID"}
+              value={naverClientId}
+              onChange={setNaverClientId}
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="naver-client-secret">
+              Client Secret
+              {settings?.naverKeyConfigured && (
+                <span className="ml-2 text-xs text-muted-foreground">새 값 입력 시 덮어씁니다</span>
+              )}
+            </Label>
+            <KeyInput
+              id="naver-client-secret"
+              placeholder={settings?.naverKeyConfigured ? "••••••••••••••••••••••••" : "Client Secret"}
+              value={naverClientSecret}
+              onChange={setNaverClientSecret}
+            />
+          </div>
+          <p className="text-xs text-muted-foreground">
+            <a
+              href="https://developers.naver.com/apps/#/list"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline"
+            >
+              네이버 개발자 센터
+            </a>
+            에서 애플리케이션을 등록하고 블로그 검색 API 권한을 부여하세요.
+          </p>
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* 브랜드 톤 프롬프트 */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2">
+          <h2 className="text-base font-semibold">브랜드 톤 프롬프트</h2>
+          <KeyStatusBadge configured={!!(settings?.brandTonePrompt?.trim())} />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="brand-tone">
+            블로그 생성 시 LLM이 최우선으로 따를 문체·어조 가이드
+          </Label>
+          <Textarea
+            id="brand-tone"
+            placeholder="예: 따뜻하고 전문적인 가족 주치의의 말투로, 환자의 입장에서 공감하며 의학 정보를 쉽게 풀어 설명합니다. 어렵고 딱딱한 의학 용어보다는 일상적인 언어를 사용하되, 신뢰감을 주는 어조를 유지합니다."
+            value={brandTonePrompt}
+            onChange={(e) => setBrandTonePrompt(e.target.value)}
+            rows={5}
+          />
+          <p className="text-xs text-muted-foreground">
+            설정하지 않으면 블로그 생성이 차단됩니다. 100자 이상 작성을 권장합니다. (현재 {brandTonePrompt.length}자)
+          </p>
         </div>
       </section>
 
